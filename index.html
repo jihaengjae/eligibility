@@ -33,10 +33,12 @@
   .wrap{max-width:740px; margin:0 auto;}
 
   .hd{background:var(--navy); color:#fff; border-radius:14px 14px 0 0; padding:26px 22px;}
-  .hd .tag{display:inline-block; background:var(--green); font-size:13px; font-weight:700;
-    padding:3px 10px; border-radius:20px; margin-bottom:10px;}
-  .hd h1{margin:0 0 8px; font-size:22px; line-height:1.45; font-weight:800;}
-  .hd p{margin:0; font-size:15px; color:#C4CEDD;}
+  .hd .tag-wrap{display:flex; align-items:center; gap:8px; margin-bottom:12px;}
+  .hd .tag-wrap img{height:34px; width:auto; border-radius:6px;}
+  .hd .tag{display:inline-block; background:var(--green); font-size:15px; font-weight:700;
+    padding:4px 14px; border-radius:20px;}
+  .hd h1{margin:0 0 8px; font-size:25px; line-height:1.45; font-weight:800;}
+  .hd p{margin:0; font-size:16px; color:#C4CEDD;}
 
   .card{background:#fff; border:1px solid var(--line); border-top:0;
     border-radius:0 0 14px 14px; padding:24px 22px 26px; margin-bottom:26px;}
@@ -117,7 +119,10 @@
 <div class="wrap">
 
   <div class="hd">
-    <span class="tag">지행재직업전문학교</span>
+    <div class="tag-wrap">
+      <img src="https://raw.githubusercontent.com/jihaengjae/eligibility/main/logo.png" alt="지행재직업전문학교 로고">
+      <span class="tag">지행재직업전문학교</span>
+    </div>
     <h1>안전 3종 응시자격 자가진단<br><span style="font-size:16px;font-weight:600;color:#C4CEDD">산업안전 · 위험물 · 소방설비 6개 등급</span></h1>
     <p>한 번만 입력하면 <strong>6개 등급 전부</strong>를 판정하고, 지금 등록 가능한 과정까지 안내합니다.</p>
   </div>
@@ -177,7 +182,6 @@
 
   <div class="res" id="res" hidden></div>
 
-  <!-- 정적 기준표 : 도구를 쓰지 않아도 정보가 전달되도록 병기 -->
   <div class="ref">
     <h2>등급별 응시자격 기준</h2>
     <p class="sub">아래 조건 중 <strong>하나만 충족</strong>하면 응시할 수 있습니다.</p>
@@ -207,7 +211,7 @@
     <p class="disc">
       이 진단은 <strong>대표적인 응시자격 경로를 기준으로 한 참고용 안내</strong>입니다.
       학과의 관련성 인정 범위, 실무경력의 직무 인정 여부, 학점 인정 등은 개별 심사에서 달라질 수 있습니다.
-      <strong>최종 판정은 큐넷 회원가입 후 ‘응시자격 자가진단’</strong>에서 확인하시고,
+      <strong>최종 판정은 큐넷 회원가입 후 '응시자격 자가진단'</strong>에서 확인하시고,
       판단이 어려우면 <strong>고객센터 1644-8000</strong>으로 문의하세요.
       원서 접수 시 경력증명서·졸업증명서 제출 기한을 놓치지 않도록 주의하시기 바랍니다.
     </p>
@@ -220,11 +224,6 @@
 (function(){
   var $ = function(id){ return document.getElementById(id); };
 
-  /* ============================================================
-     ★① 모집중인 과정 — 회차마다 이 부분만 고치면 됩니다
-        status : "모집중" | "예정" | "마감"
-        link   : 고용24 과정 주소 (없으면 "" 로 두세요)
-     ============================================================ */
   var COURSES = {
     "위험물기능사":     { status:"모집중", open:"", weeks:"", time:"", cost:"", link:"" },
     "위험물산업기사":   { status:"모집중", open:"", weeks:"", time:"", cost:"", link:"" },
@@ -239,15 +238,13 @@
   var TEL   = "tel:0522673172";
   var CARD  = "https://www.work24.go.kr";
 
-  var GRADE = { craft:"기능사", ind:"산업기사", eng:"기사" };
   var SUBJ  = {
     "위험물기능사":"danger", "위험물산업기사":"danger",
     "산업안전산업기사":"safe", "산업안전기사":"safe",
     "소방설비산업기사":"fire", "소방설비기사":"fire"
   };
   var LABEL = { safe:"산업안전", danger:"위험물", fire:"소방설비" };
-
-  var okList = [];   // 응시 가능한 종목명
+  var okList = [];
 
   function courseBox(name){
     var c = COURSES[name];
@@ -272,9 +269,8 @@
     $("err").hidden = true;
     okList = [];
 
-    var rel = (major !== "none");   // 관련학과 인정 여부
+    var rel = (major !== "none");
 
-    /* ── 산업기사 등급 판정 ── */
     var indOk = [], indGap = [];
     if(rel && (edu==="col2"||edu==="col3"||edu==="uni")) indOk.push("관련학과 전문대 졸업(예정) 이상");
     if(cert==="craft" && exp>=1) indOk.push("기능사 취득 + 경력 1년 이상");
@@ -290,7 +286,6 @@
       indGap = g1;
     }
 
-    /* ── 기사 등급 판정 ── */
     var engOk = [], engGap = [];
     if(rel && edu==="uni") engOk.push("관련학과 4년제 졸업(예정)");
     if(rel && edu==="col3" && exp>=1) engOk.push("3년제 전문대 졸업 + 경력 1년 이상");
@@ -310,7 +305,6 @@
       engGap = g2;
     }
 
-    /* ── 6개 등급 카드 생성 ── */
     function card(name, pass, reasons, gaps){
       var s = SUBJ[name];
       var html = '<div class="row '+(pass?"ok":"no")+'">'+
@@ -330,13 +324,9 @@
     }
 
     var html = "";
-
-    /* 1) 지금 바로 가능 */
     html += '<div class="band"><h2>지금 응시할 수 있는 자격</h2>'+
             '<p class="s">아래는 현재 조건으로 바로 원서 접수가 가능합니다.</p>';
-    var anyNow = false;
     html += card("위험물기능사", true, ["기능사는 학력·경력 제한이 없습니다"], []);
-    anyNow = true;
     if(indOk.length){
       html += card("산업안전산업기사", true, indOk, []);
       html += card("위험물산업기사", true, indOk, []);
@@ -348,7 +338,6 @@
     }
     html += '</div>';
 
-    /* 2) 아직 안 되는 것 */
     if(!indOk.length || !engOk.length){
       html += '<div class="band no"><h2>아직 자격이 안 되는 것 — 확보 전략</h2>'+
               '<p class="s">가장 빠른 길에 표시해 두었습니다.</p>';
@@ -364,37 +353,33 @@
       html += '</div>';
     }
 
-    /* 3) 전공 확인 주의 */
     if(major==="etc_eng" || major==="chem" || major==="fire"){
-      html += '<div class="row no" style="border-left-color:'+"#B58A00"+'">'+
+      html += '<div class="row no" style="border-left-color:#B58A00">'+
         '<div class="nm">⚠️ 전공 인정 여부는 큐넷에서 확인하세요</div>'+
         '<p class="rs">관련학과 판단은 <b>학과 명칭이 아니라 이수한 교육과정</b> 기준입니다. '+
         '위 결과는 관련학과로 인정된다는 가정으로 계산했습니다. '+
         '큐넷 <b>응시자격 자가진단</b> 또는 <b>1644-8000</b>으로 확인해 두시면 안전합니다.</p></div>';
     }
 
-    /* 4) 2단계 — 내일배움카드 */
     html += '<div class="step2" id="step2"><h3>다음 단계 — 국비 지원 확인</h3>'+
       '<p>응시 가능한 자격이 <strong>'+okList.length+'개</strong> 있습니다. '+
       '국비 과정으로 준비하시려면 <strong>내일배움카드</strong>가 필요합니다.</p>'+
       '<button type="button" class="b1" id="cardY">카드가 있습니다 → 수강신청 안내</button>'+
       '<button type="button" class="b2" id="cardN">카드가 없습니다 → 발급 안내</button>'+
       '<button type="button" class="b2" id="cardU">잘 모르겠습니다 → 상담</button></div>';
-
     html += '<div id="final"></div>';
 
     $("res").innerHTML = html;
     $("res").hidden = false;
     $("res").scrollIntoView({behavior:"smooth", block:"start"});
 
-    /* 2단계 버튼 동작 */
     function finalBlock(kind){
       var h = "", p = "", steps = "", a1 = "";
       if(kind==="Y"){
         h = "바로 수강신청하실 수 있습니다";
-        p = "카드가 있으시면 고용24에서 과정을 검색해 신청하면 됩니다. 어느 과정이 맞는지 헷갈리시면 상담에서 정해 드립니다.";
+        p = "카드가 있으시면 고용24에서 과정을 검색해 신청하면 됩니다.";
         steps = '<ol><li>고용24 로그인 → 훈련과정 검색</li>'+
-                '<li>‘지행재직업전문학교’로 검색</li>'+
+                '<li>\'지행재직업전문학교\'로 검색</li>'+
                 '<li>해당 과정 수강신청</li></ol>';
         a1 = "과정 선택 상담 신청하기";
       } else if(kind==="N"){
@@ -431,7 +416,6 @@
 <script>
 (function(){
   var ALLOW_HOSTS = [
-    /* ★② 실제 운영 도메인을 넣으세요 */
     "jihaengjae.github.io",
     "jhj.education",
     "www.jhj.education",
