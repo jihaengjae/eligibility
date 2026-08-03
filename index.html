@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+   안전 3종 응시자격 자가진단 (산업안전·위험물·소방설비 / 6개 등급)
+   © 2026 지행재직업전문학교 (https://www.jhj.education)
+   울산 남구 북부순환도로 17 · 052-267-3172
+
+   무단 복제·배포·2차적 저작물 작성을 금합니다.
+   코드의 전부 또는 일부를 타 사이트에 게시하는 행위,
+   저작권 표시를 제거·변경하는 행위를 금합니다. 인용·링크는 자유입니다.
+  ============================================================
+   ★ 운영자 수정 지점 2곳
+     ① COURSES  : 모집중인 과정 정보 (회차마다 갱신)
+     ② ALLOW_HOSTS : 도메인 잠금 허용 목록 (파일 맨 아래)
+  ============================================================
+-->
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>안전 3종 응시자격 자가진단 — 산업안전·위험물·소방설비 | 지행재직업전문학교</title>
+<meta name="description" content="학력·경력·학점만 넣으면 산업안전·위험물·소방설비 6개 등급의 응시자격을 한 번에 확인합니다. 지금 등록 가능한 국비 과정까지 안내합니다.">
+<style>
+  :root{
+    --navy:#1B2740; --green:#1FA85A; --green-d:#178C4A;
+    --gray:#F2F4F7; --line:#DDE1E8; --amber:#B58A00; --red:#C0392B;
+    --c-safe:#1FA85A; --c-danger:#E67E22; --c-fire:#C0392B;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; padding:24px 16px 60px; background:#F7F8FA; color:#242424;
+    font-family:'Pretendard','Apple SD Gothic Neo','맑은 고딕',sans-serif;
+    line-height:1.7; word-break:keep-all;}
+  .wrap{max-width:740px; margin:0 auto;}
+
+  .hd{background:var(--navy); color:#fff; border-radius:14px 14px 0 0; padding:26px 22px;}
+  .hd .tag{display:inline-block; background:var(--green); font-size:13px; font-weight:700;
+    padding:3px 10px; border-radius:20px; margin-bottom:10px;}
+  .hd h1{margin:0 0 8px; font-size:22px; line-height:1.45; font-weight:800;}
+  .hd p{margin:0; font-size:15px; color:#C4CEDD;}
+
+  .card{background:#fff; border:1px solid var(--line); border-top:0;
+    border-radius:0 0 14px 14px; padding:24px 22px 26px; margin-bottom:26px;}
+  .f{margin-bottom:18px;}
+  .f > label{display:block; font-size:16px; font-weight:700; color:var(--navy); margin-bottom:7px;}
+  .f .hint{font-size:13px; font-weight:400; color:#7A8494; margin-left:4px;}
+  select, input[type=number]{width:100%; font-size:16px; padding:12px 14px;
+    border:1px solid #CCD2DB; border-radius:8px; background:#fff; color:#242424; font-family:inherit;}
+  select:focus, input:focus{outline:none; border-color:var(--green);}
+  .note{margin:7px 0 0; font-size:13px; color:#7A8494; line-height:1.65;}
+  .btn{width:100%; font-family:inherit; font-size:18px; font-weight:800; color:#fff;
+    background:var(--green); border:0; border-radius:8px; padding:16px; cursor:pointer; margin-top:6px;}
+  .btn:hover{background:var(--green-d);}
+  .err{margin:10px 0 0; font-size:14px; color:var(--red);}
+
+  .res{margin-bottom:26px;}
+  .band{background:#fff; border:1px solid var(--line); border-radius:12px; padding:20px 20px 6px; margin-bottom:14px;}
+  .band > h2{margin:0 0 4px; font-size:18px; color:var(--navy);
+    padding-left:11px; border-left:5px solid var(--green);}
+  .band > p.s{margin:0 0 14px 16px; font-size:14px; color:#7A8494;}
+  .band.no > h2{border-left-color:#B9C0CC;}
+
+  .row{border:1px solid var(--line); border-radius:10px; padding:14px 16px; margin-bottom:10px;}
+  .row.ok{border-left:5px solid var(--green); background:#F7FCF9;}
+  .row.no{border-left:5px solid #C9CFD9; background:#FAFBFC;}
+  .row .nm{font-size:16px; font-weight:800; color:var(--navy); margin-bottom:3px;}
+  .row .nm em{font-style:normal; font-size:12px; font-weight:700; padding:2px 7px;
+    border-radius:4px; margin-left:5px; vertical-align:middle; color:#fff;}
+  .e-safe{background:var(--c-safe);} .e-danger{background:var(--c-danger);} .e-fire{background:var(--c-fire);}
+  .row .rs{font-size:14px; color:#3A4250; margin:0 0 6px;}
+  .row .rs b{color:var(--navy);}
+  .row .strat{margin:8px 0 0; padding-left:17px; font-size:14px;}
+  .row .strat li{margin:4px 0;}
+  .row .strat b{color:var(--amber);}
+  .row .best{color:var(--green); font-weight:800;}
+
+  .course{background:#EEF7F1; border:1px solid #CFE6D8; border-radius:8px;
+    padding:11px 13px; margin-top:9px; font-size:14px; line-height:1.75;}
+  .course b{color:var(--navy);}
+  .course .st{display:inline-block; background:var(--green); color:#fff; font-size:11px;
+    font-weight:700; padding:2px 7px; border-radius:4px; margin-right:5px;}
+
+  .step2{background:var(--navy); border-radius:12px; padding:24px 22px; color:#fff; margin-bottom:14px;}
+  .step2 h3{margin:0 0 6px; font-size:19px; color:#fff;}
+  .step2 p{margin:0 0 16px; font-size:15px; color:#C4CEDD;}
+  .step2 button{width:100%; font-family:inherit; font-size:16px; font-weight:800;
+    padding:14px; border-radius:8px; margin-bottom:9px; cursor:pointer; border:0;}
+  .step2 .b1{background:var(--green); color:#fff;}
+  .step2 .b2{background:transparent; color:#fff; border:1px solid #465470;}
+
+  .cta{background:var(--navy); border-radius:12px; padding:24px 22px; color:#fff; margin-bottom:26px;}
+  .cta h3{margin:0 0 8px; font-size:19px; color:#fff;}
+  .cta p{margin:0 0 16px; font-size:15px; color:#C4CEDD;}
+  .cta ol{margin:0 0 16px; padding-left:20px; color:#DDE4EE; font-size:15px;}
+  .cta ol li{margin:5px 0;}
+  .cta a{display:block; text-align:center; text-decoration:none; font-weight:800;
+    font-size:16px; padding:14px; border-radius:8px; margin-bottom:9px;}
+  .cta .primary{background:var(--green); color:#fff;}
+  .cta .ghost{background:transparent; color:#fff; border:1px solid #465470;}
+  .cta .credit{margin:14px 0 0; font-size:12px; color:#7E8CA6; text-align:center;}
+
+  .ref{background:#fff; border:1px solid var(--line); border-radius:12px; padding:22px;}
+  .ref h2{margin:0 0 6px; font-size:18px; color:var(--navy);
+    padding-left:11px; border-left:5px solid var(--navy);}
+  .ref p.sub{margin:0 0 14px; font-size:14px; color:#6B7280;}
+  table{width:100%; border-collapse:collapse; font-size:14px; margin:0 0 18px;}
+  th{background:var(--navy); color:#fff; padding:9px 8px; text-align:center; font-size:13px;}
+  td{padding:9px 8px; border-bottom:1px solid #EDF0F4; vertical-align:top;}
+  td:first-child{white-space:nowrap; font-weight:700; background:#F7F9FC; text-align:center;}
+  .src{font-size:13px; color:#8A93A0; margin:0 0 4px;}
+  .disc{margin:16px 0 0; padding-top:14px; border-top:1px dashed var(--line);
+    font-size:13px; color:#7A8494;}
+  .foot{text-align:center; font-size:13px; color:#98A0AC; margin-top:26px;}
+  @media (max-width:480px){ .hd h1{font-size:20px;} th,td{font-size:13px; padding:8px 6px;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hd">
+    <span class="tag">지행재직업전문학교</span>
+    <h1>안전 3종 응시자격 자가진단<br><span style="font-size:16px;font-weight:600;color:#C4CEDD">산업안전 · 위험물 · 소방설비 6개 등급</span></h1>
+    <p>한 번만 입력하면 <strong>6개 등급 전부</strong>를 판정하고, 지금 등록 가능한 과정까지 안내합니다.</p>
+  </div>
+
+  <div class="card" id="form">
+    <div class="f">
+      <label for="edu">① 최종 학력</label>
+      <select id="edu">
+        <option value="">선택하세요</option>
+        <option value="hs">고등학교 졸업</option>
+        <option value="col2">2년제 전문대학 졸업(예정)</option>
+        <option value="col3">3년제 전문대학 졸업(예정)</option>
+        <option value="uni">4년제 대학교 졸업(예정)</option>
+        <option value="drop">대학 재학·중퇴</option>
+      </select>
+    </div>
+
+    <div class="f">
+      <label for="major">② 전공 계열 <span class="hint">학과명이 아니라 배운 과목으로 판단합니다</span></label>
+      <select id="major">
+        <option value="">선택하세요</option>
+        <option value="safety">안전·보건 계열 (안전공학·산업안전·보건안전 등)</option>
+        <option value="chem">화학·화공 계열</option>
+        <option value="fire">소방·전기·기계 계열</option>
+        <option value="etc_eng">기타 공학 계열 (건설·토목·건축·조선·환경 등)</option>
+        <option value="none">그 외 전공 · 해당 없음 (인문·상경·예체능 등)</option>
+      </select>
+      <p class="note">안전공학·소방학·화학공학·전기전자·기계공학 등은 대체로 관련학과로 인정됩니다. 최종 판단은 이수 과목 기준이라 큐넷 확인을 권합니다.</p>
+    </div>
+
+    <div class="f">
+      <label for="cert">③ 보유한 국가기술자격 <span class="hint">동일·유사 직무분야 기준</span></label>
+      <select id="cert">
+        <option value="">선택하세요</option>
+        <option value="none">없음</option>
+        <option value="craft">기능사 (위험물기능사·가스기능사 등)</option>
+        <option value="ind">산업기사</option>
+        <option value="eng">기사</option>
+      </select>
+    </div>
+
+    <div class="f">
+      <label for="exp">④ 동일·유사 직무분야 실무경력 <span class="hint">년 단위, 없으면 0</span></label>
+      <input type="number" id="exp" min="0" max="40" step="1" placeholder="예: 2" inputmode="numeric">
+      <p class="note">인정 예 — 안전관리자·안전보건 담당 / 제조 현장 생산·설비·품질관리 / 건설현장 공무·안전 / 소방·전기·가스·위험물 취급·설비 관리<br>
+      사무·경영직이라도 <strong>안전교육·노무관리 등 실제 업무를 경력증명서에 구체적으로 기재</strong>하면 인정되는 사례가 있습니다.</p>
+    </div>
+
+    <div class="f">
+      <label for="credit">⑤ 학점은행제 이수 학점 <span class="hint">해당 없으면 0</span></label>
+      <input type="number" id="credit" min="0" max="200" step="1" placeholder="예: 0" inputmode="numeric">
+    </div>
+
+    <button type="button" class="btn" id="go">6개 등급 한 번에 확인하기</button>
+    <p class="err" id="err" hidden>①~⑤를 모두 입력·선택해 주세요.</p>
+  </div>
+
+  <div class="res" id="res" hidden></div>
+
+  <!-- 정적 기준표 : 도구를 쓰지 않아도 정보가 전달되도록 병기 -->
+  <div class="ref">
+    <h2>등급별 응시자격 기준</h2>
+    <p class="sub">아래 조건 중 <strong>하나만 충족</strong>하면 응시할 수 있습니다.</p>
+
+    <table>
+      <thead><tr><th>등급</th><th>해당 종목</th><th>응시자격</th></tr></thead>
+      <tbody>
+        <tr><td>기능사</td><td>위험물기능사</td><td><strong>제한 없음</strong> — 학력·경력 무관 누구나</td></tr>
+        <tr><td>산업기사</td><td>산업안전산업기사<br>위험물산업기사<br>소방설비산업기사</td><td>관련학과 전문대 졸업(예정) 이상<br>기능사 취득 + 경력 1년<br>동일·유사 분야 산업기사 이상 취득<br>실무경력 2년<br>학점은행 41학점</td></tr>
+        <tr><td>기사</td><td>산업안전기사<br>소방설비기사</td><td>관련학과 4년제 졸업(예정)<br>3년제 전문대 + 경력 1년 / 2년제 + 경력 2년<br>산업기사 취득 + 경력 1년<br>기능사 취득 + 경력 3년<br>동일·유사 분야 기사 취득<br>실무경력 4년<br>학점은행 106학점</td></tr>
+      </tbody>
+    </table>
+
+    <h2 style="margin-top:24px">종목별 등급 구성</h2>
+    <p class="sub">종목마다 있는 등급이 다릅니다.</p>
+    <table>
+      <thead><tr><th>종목</th><th>기능사</th><th>산업기사</th><th>기사</th></tr></thead>
+      <tbody>
+        <tr><td>산업안전</td><td style="text-align:center">없음</td><td style="text-align:center">○</td><td style="text-align:center">○</td></tr>
+        <tr><td>위험물</td><td style="text-align:center"><strong>○</strong></td><td style="text-align:center">○</td><td style="text-align:center">없음<br><span style="font-size:12px;color:#8A93A0">(상위는 기능장)</span></td></tr>
+        <tr><td>소방설비</td><td style="text-align:center">없음</td><td style="text-align:center">○</td><td style="text-align:center">○</td></tr>
+      </tbody>
+    </table>
+    <p class="src">※ 소방설비는 <strong>전기분야·기계분야</strong>로 나뉘며, 응시자격은 동일합니다.</p>
+    <p class="src">※ 자료: 한국산업인력공단 큐넷(q-net.or.kr) 응시자격 기준, 국가기술자격법 시행령. 2026년 기준.</p>
+
+    <p class="disc">
+      이 진단은 <strong>대표적인 응시자격 경로를 기준으로 한 참고용 안내</strong>입니다.
+      학과의 관련성 인정 범위, 실무경력의 직무 인정 여부, 학점 인정 등은 개별 심사에서 달라질 수 있습니다.
+      <strong>최종 판정은 큐넷 회원가입 후 ‘응시자격 자가진단’</strong>에서 확인하시고,
+      판단이 어려우면 <strong>고객센터 1644-8000</strong>으로 문의하세요.
+      원서 접수 시 경력증명서·졸업증명서 제출 기한을 놓치지 않도록 주의하시기 바랍니다.
+    </p>
+  </div>
+
+  <p class="foot">© 2026 지행재직업전문학교 · 울산 남구 북부순환도로 17</p>
+</div>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+
+  /* ============================================================
+     ★① 모집중인 과정 — 회차마다 이 부분만 고치면 됩니다
+        status : "모집중" | "예정" | "마감"
+        link   : 고용24 과정 주소 (없으면 "" 로 두세요)
+     ============================================================ */
+  var COURSES = {
+    "위험물기능사":     { status:"모집중", open:"", weeks:"", time:"", cost:"", link:"" },
+    "위험물산업기사":   { status:"모집중", open:"", weeks:"", time:"", cost:"", link:"" },
+    "산업안전산업기사": { status:"모집중", open:"", weeks:"", time:"", cost:"", link:"" },
+    "소방설비산업기사": { status:"모집중", open:"", weeks:"", time:"", cost:"", link:"" },
+    "산업안전기사":     { status:"모집중", open:"", weeks:"", time:"", cost:"", link:"" },
+    "소방설비기사":     { status:"모집중", open:"", weeks:"", time:"", cost:"", link:"" }
+  };
+
+  var KAKAO = "https://pf.kakao.com/_bnxnAX";
+  var HOME  = "https://www.jhj.education/?utm_source=jindan&utm_medium=tool&utm_campaign=safety3";
+  var TEL   = "tel:0522673172";
+  var CARD  = "https://www.work24.go.kr";
+
+  var GRADE = { craft:"기능사", ind:"산업기사", eng:"기사" };
+  var SUBJ  = {
+    "위험물기능사":"danger", "위험물산업기사":"danger",
+    "산업안전산업기사":"safe", "산업안전기사":"safe",
+    "소방설비산업기사":"fire", "소방설비기사":"fire"
+  };
+  var LABEL = { safe:"산업안전", danger:"위험물", fire:"소방설비" };
+
+  var okList = [];   // 응시 가능한 종목명
+
+  function courseBox(name){
+    var c = COURSES[name];
+    if(!c || c.status === "마감") return "";
+    var bits = [];
+    if(c.open) bits.push("개강 " + c.open);
+    if(c.weeks) bits.push(c.weeks);
+    if(c.time) bits.push(c.time);
+    if(c.cost) bits.push("자부담 " + c.cost);
+    var detail = bits.length ? bits.join(" · ") : "회차 일정은 상담에서 안내드립니다";
+    return '<div class="course"><span class="st">' + c.status + '</span>' +
+           '<b>' + name + ' 과정</b><br>' + detail + '</div>';
+  }
+
+  $("go").addEventListener("click", function(){
+    var edu = $("edu").value, major = $("major").value, cert = $("cert").value;
+    var exp = parseInt($("exp").value,10), credit = parseInt($("credit").value,10);
+
+    if(!edu || !major || !cert || isNaN(exp) || isNaN(credit)){
+      $("err").hidden = false; $("res").hidden = true; return;
+    }
+    $("err").hidden = true;
+    okList = [];
+
+    var rel = (major !== "none");   // 관련학과 인정 여부
+
+    /* ── 산업기사 등급 판정 ── */
+    var indOk = [], indGap = [];
+    if(rel && (edu==="col2"||edu==="col3"||edu==="uni")) indOk.push("관련학과 전문대 졸업(예정) 이상");
+    if(cert==="craft" && exp>=1) indOk.push("기능사 취득 + 경력 1년 이상");
+    if(cert==="ind"||cert==="eng") indOk.push("동일·유사 분야 산업기사 이상 취득");
+    if(exp>=2) indOk.push("실무경력 2년 이상");
+    if(credit>=41) indOk.push("학점은행 41학점 이상");
+    if(indOk.length===0){
+      var g1 = [];
+      if(credit<41) g1.push({t:"학점은행 <b>"+(41-credit)+"학점</b> 추가 이수", w:(41-credit)});
+      if(exp<2) g1.push({t:"실무경력 <b>"+(2-exp)+"년</b> 추가", w:(2-exp)*40});
+      g1.push({t:"<b>위험물기능사</b> 먼저 취득 후 경력 1년", w:60});
+      g1.sort(function(a,b){return a.w-b.w;});
+      indGap = g1;
+    }
+
+    /* ── 기사 등급 판정 ── */
+    var engOk = [], engGap = [];
+    if(rel && edu==="uni") engOk.push("관련학과 4년제 졸업(예정)");
+    if(rel && edu==="col3" && exp>=1) engOk.push("3년제 전문대 졸업 + 경력 1년 이상");
+    if(rel && edu==="col2" && exp>=2) engOk.push("2년제 전문대 졸업 + 경력 2년 이상");
+    if(cert==="ind" && exp>=1) engOk.push("산업기사 취득 + 경력 1년 이상");
+    if(cert==="craft" && exp>=3) engOk.push("기능사 취득 + 경력 3년 이상");
+    if(cert==="eng") engOk.push("동일·유사 분야 기사 취득");
+    if(exp>=4) engOk.push("실무경력 4년 이상");
+    if(credit>=106) engOk.push("학점은행 106학점 이상");
+    if(engOk.length===0){
+      var g2 = [];
+      if(credit<106) g2.push({t:"학점은행 <b>"+(106-credit)+"학점</b> 추가 이수", w:(106-credit)});
+      if(exp<4) g2.push({t:"실무경력 <b>"+(4-exp)+"년</b> 추가", w:(4-exp)*40});
+      if(indOk.length>0) g2.push({t:"<b>산업기사를 먼저 취득</b>하고 경력 1년", w:50});
+      else g2.push({t:"<b>위험물기능사 → 산업기사</b> 순으로 단계 취득", w:150});
+      g2.sort(function(a,b){return a.w-b.w;});
+      engGap = g2;
+    }
+
+    /* ── 6개 등급 카드 생성 ── */
+    function card(name, pass, reasons, gaps){
+      var s = SUBJ[name];
+      var html = '<div class="row '+(pass?"ok":"no")+'">'+
+        '<div class="nm">'+name+'<em class="e-'+(s==="safe"?"safe":s==="danger"?"danger":"fire")+'">'+LABEL[s]+'</em></div>';
+      if(pass){
+        html += '<p class="rs">✅ <b>응시 가능</b> — '+reasons[0]+'</p>';
+        html += courseBox(name);
+        okList.push(name);
+      } else {
+        html += '<p class="rs">아래 중 하나를 채우면 응시할 수 있습니다.</p><ul class="strat">';
+        for(var i=0;i<gaps.length;i++){
+          html += '<li'+(i===0?' class="best"':'')+'>'+gaps[i].t+(i===0?' &nbsp;← 가장 빠른 길':'')+'</li>';
+        }
+        html += '</ul>';
+      }
+      return html + '</div>';
+    }
+
+    var html = "";
+
+    /* 1) 지금 바로 가능 */
+    html += '<div class="band"><h2>지금 응시할 수 있는 자격</h2>'+
+            '<p class="s">아래는 현재 조건으로 바로 원서 접수가 가능합니다.</p>';
+    var anyNow = false;
+    html += card("위험물기능사", true, ["기능사는 학력·경력 제한이 없습니다"], []);
+    anyNow = true;
+    if(indOk.length){
+      html += card("산업안전산업기사", true, indOk, []);
+      html += card("위험물산업기사", true, indOk, []);
+      html += card("소방설비산업기사", true, indOk, []);
+    }
+    if(engOk.length){
+      html += card("산업안전기사", true, engOk, []);
+      html += card("소방설비기사", true, engOk, []);
+    }
+    html += '</div>';
+
+    /* 2) 아직 안 되는 것 */
+    if(!indOk.length || !engOk.length){
+      html += '<div class="band no"><h2>아직 자격이 안 되는 것 — 확보 전략</h2>'+
+              '<p class="s">가장 빠른 길에 표시해 두었습니다.</p>';
+      if(!indOk.length){
+        html += card("산업안전산업기사", false, [], indGap);
+        html += card("위험물산업기사", false, [], indGap);
+        html += card("소방설비산업기사", false, [], indGap);
+      }
+      if(!engOk.length){
+        html += card("산업안전기사", false, [], engGap);
+        html += card("소방설비기사", false, [], engGap);
+      }
+      html += '</div>';
+    }
+
+    /* 3) 전공 확인 주의 */
+    if(major==="etc_eng" || major==="chem" || major==="fire"){
+      html += '<div class="row no" style="border-left-color:'+"#B58A00"+'">'+
+        '<div class="nm">⚠️ 전공 인정 여부는 큐넷에서 확인하세요</div>'+
+        '<p class="rs">관련학과 판단은 <b>학과 명칭이 아니라 이수한 교육과정</b> 기준입니다. '+
+        '위 결과는 관련학과로 인정된다는 가정으로 계산했습니다. '+
+        '큐넷 <b>응시자격 자가진단</b> 또는 <b>1644-8000</b>으로 확인해 두시면 안전합니다.</p></div>';
+    }
+
+    /* 4) 2단계 — 내일배움카드 */
+    html += '<div class="step2" id="step2"><h3>다음 단계 — 국비 지원 확인</h3>'+
+      '<p>응시 가능한 자격이 <strong>'+okList.length+'개</strong> 있습니다. '+
+      '국비 과정으로 준비하시려면 <strong>내일배움카드</strong>가 필요합니다.</p>'+
+      '<button type="button" class="b1" id="cardY">카드가 있습니다 → 수강신청 안내</button>'+
+      '<button type="button" class="b2" id="cardN">카드가 없습니다 → 발급 안내</button>'+
+      '<button type="button" class="b2" id="cardU">잘 모르겠습니다 → 상담</button></div>';
+
+    html += '<div id="final"></div>';
+
+    $("res").innerHTML = html;
+    $("res").hidden = false;
+    $("res").scrollIntoView({behavior:"smooth", block:"start"});
+
+    /* 2단계 버튼 동작 */
+    function finalBlock(kind){
+      var h = "", p = "", steps = "", a1 = "";
+      if(kind==="Y"){
+        h = "바로 수강신청하실 수 있습니다";
+        p = "카드가 있으시면 고용24에서 과정을 검색해 신청하면 됩니다. 어느 과정이 맞는지 헷갈리시면 상담에서 정해 드립니다.";
+        steps = '<ol><li>고용24 로그인 → 훈련과정 검색</li>'+
+                '<li>‘지행재직업전문학교’로 검색</li>'+
+                '<li>해당 과정 수강신청</li></ol>';
+        a1 = "과정 선택 상담 신청하기";
+      } else if(kind==="N"){
+        h = "먼저 내일배움카드부터 발급받으세요";
+        p = "카드 발급에 <strong>1~2주</strong>가 걸리므로, 개강일을 놓치지 않으려면 지금 신청하시는 것이 좋습니다.";
+        steps = '<ol><li>고용24 회원가입</li>'+
+                '<li>내일배움카드 신청 (온라인 약 15분)</li>'+
+                '<li>승인까지 1~2주 대기</li>'+
+                '<li>카드 발급 후 수강신청</li></ol>';
+        a1 = "발급이 어렵다면 상담 신청하기";
+      } else {
+        h = "상담에서 한 번에 확인해 드립니다";
+        p = "카드 보유 여부, 자부담 금액, 개강 일정까지 함께 짚어 드립니다.";
+        steps = "";
+        a1 = "상담 신청하기";
+      }
+      var out = '<div class="cta"><h3>'+h+'</h3><p>'+p+'</p>'+steps+
+        '<a class="primary" href="'+KAKAO+'" target="_blank" rel="noopener">'+a1+'</a>';
+      if(kind==="N") out += '<a class="ghost" href="'+CARD+'" target="_blank" rel="noopener">고용24에서 카드 신청하기</a>';
+      out += '<a class="ghost" href="'+TEL+'">전화 상담 052-267-3172</a>'+
+        '<a class="ghost" href="'+HOME+'" target="_blank" rel="noopener">과정 안내 보기</a>'+
+        '<p class="credit">이 진단 결과는 지행재직업전문학교가 제공합니다 · © 2026 jhj.education</p></div>';
+      $("final").innerHTML = out;
+      $("final").scrollIntoView({behavior:"smooth", block:"start"});
+    }
+    $("cardY").addEventListener("click", function(){ finalBlock("Y"); });
+    $("cardN").addEventListener("click", function(){ finalBlock("N"); });
+    $("cardU").addEventListener("click", function(){ finalBlock("U"); });
+  });
+})();
+</script>
+
+<!-- 도메인 잠금 -->
+<script>
+(function(){
+  var ALLOW_HOSTS = [
+    /* ★② 실제 운영 도메인을 넣으세요 */
+    "jihaengjae.github.io",
+    "jhj.education",
+    "www.jhj.education",
+    "localhost", "127.0.0.1", ""
+  ];
+  if(ALLOW_HOSTS.indexOf(location.hostname) === -1){
+    document.body.innerHTML =
+      '<div style="max-width:520px;margin:80px auto;padding:40px 24px;text-align:center;'+
+      'font-family:Pretendard,\'Apple SD Gothic Neo\',sans-serif;background:#fff;'+
+      'border:1px solid #DDE1E8;border-radius:14px;line-height:1.8;color:#242424">'+
+      '<p style="font-size:17px;font-weight:800;color:#1B2740;margin:0 0 10px">'+
+      '지행재직업전문학교 제공 도구입니다</p>'+
+      '<p style="font-size:15px;color:#6B7280;margin:0 0 22px">'+
+      '이 응시자격 자가진단은 공식 사이트에서만 이용하실 수 있습니다.</p>'+
+      '<a href="https://www.jhj.education" style="display:inline-block;background:#1FA85A;'+
+      'color:#fff;text-decoration:none;font-weight:800;padding:13px 26px;border-radius:8px">'+
+      'jhj.education에서 이용하기</a>'+
+      '<p style="font-size:12px;color:#98A0AC;margin:22px 0 0">© 2026 지행재직업전문학교</p></div>';
+  }
+})();
+</script>
+</body>
+</html>
