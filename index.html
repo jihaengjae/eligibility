@@ -1,7 +1,8 @@
 <!DOCTYPE html>
+<!-- 지행재직업전문학교 홈페이지 · site v1.0.1 · 2026-08-14 · 자가진단 v3.0.0 배포 2026-10-29 -->
 <!--
   ============================================================
-   안전 3종 응시자격 자가진단 (산업안전·위험물·소방설비 / 6개 등급)
+   안전 3종 응시자격 자가진단 v2 (산업안전·위험물·소방설비 / 6개 등급)
    © 2026 지행재직업전문학교 (https://www.jhj.education)
    울산 남구 북부순환도로 17 · 052-267-3172
 
@@ -9,8 +10,22 @@
    코드의 전부 또는 일부를 타 사이트에 게시하는 행위,
    저작권 표시를 제거·변경하는 행위를 금합니다. 인용·링크는 자유입니다.
   ============================================================
+   v3 변경점 (2026-08) — 군 복무 경력 반영
+     · 육군·해군·공군·해병대 특기별 경력인정 범위를 내장했다
+     · 특기명을 입력하면 직무분야를 자동 판정해 실무경력에 합산한다
+     · 근거: 한국산업인력공단 「국가기술자격검정 직무분야별 ○○ 특기 경력인정 범위」
+       육군 2026.02 / 해군 2025.02.18 / 공군 2025.02.17 / 해병대 2022.08 기준
+     · 기초군사훈련 기간은 산정에서 제외한다(원자료 명시)
+   ------------------------------------------------------------
+   v2 변경점 (2026-08)
+     · 경력을 '년수'가 아니라 '직무분야 + 년수'로 받는다
+     · 산업안전·소방설비(25.안전관리)와 위험물(18.화학)의
+       인정 범위가 다르므로 종목군별로 따로 판정한다
+     · 근거: 국가기술자격법 시행규칙 [별표 11의2] 유사 직무분야
+     · 경력증명서 담당업무 기재 가이드를 결과 화면에 추가
+   ============================================================
    ★ 운영자 수정 지점 2곳
-     ① COURSES  : 모집중인 과정 정보 (회차마다 갱신)
+     ① COURSES     : 모집중인 과정 정보 (회차마다 갱신)
      ② ALLOW_HOSTS : 도메인 잠금 허용 목록 (파일 맨 아래)
   ============================================================
 -->
@@ -18,9 +33,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>안전 3종 응시자격 자가진단 — 산업안전·위험물·소방설비 | 지행재직업전문학교</title>
-<meta name="description" content="학력·경력·학점만 넣으면 산업안전·위험물·소방설비 6개 등급의 응시자격을 한 번에 확인합니다. 지금 등록 가능한 국비 과정까지 안내합니다.">
 <link rel="shortcut icon" href="JHJ_Favicon.ico" type="image/x-icon">
+<title>안전 3종 응시자격 자가진단 — 산업안전·위험물·소방설비 | 지행재직업전문학교</title>
+<meta name="description" content="학력·전공·경력 직무분야·학점을 넣으면 산업안전·위험물·소방설비 6개 등급의 응시자격을 한 번에 판정합니다. 경력 인정 범위는 종목마다 다릅니다.">
 <style>
   :root{
     --navy:#1B2740; --green:#1FA85A; --green-d:#178C4A;
@@ -31,28 +46,29 @@
   body{margin:0; padding:24px 16px 60px; background:#F7F8FA; color:#242424;
     font-family:'Pretendard','Apple SD Gothic Neo','맑은 고딕',sans-serif;
     line-height:1.7; word-break:keep-all;}
-  .wrap{max-width:740px; margin:0 auto;}
+  .el-wrap{max-width:740px; margin:0 auto;}
 
   .hd{background:var(--navy); color:#fff; border-radius:14px 14px 0 0; padding:26px 22px;}
-  .hd .tag-wrap{display:flex; align-items:center; gap:8px; margin-bottom:12px;}
+  .hd .tag-wrap{display:flex; align-items:center; gap:8px; margin-bottom:10px;}
   .hd .tag-wrap img{height:34px; width:auto; border-radius:6px;}
-  .hd .tag{display:inline-block; background:var(--green); font-size:15px; font-weight:700;
-    padding:4px 14px; border-radius:20px;}
-  .hd h1{margin:0 0 8px; font-size:25px; line-height:1.45; font-weight:800;}
-  .hd p{margin:0; font-size:16px; color:#C4CEDD;}
+  .hd .tag-wrap .tag{margin-bottom:0;}
+  .hd .tag{display:inline-block; background:var(--green); font-size:13px; font-weight:700;
+    padding:3px 10px; border-radius:20px; margin-bottom:10px;}
+  .hd h1{margin:0 0 8px; font-size:22px; line-height:1.45; font-weight:800;}
+  .hd p{margin:0; font-size:15px; color:#C4CEDD;}
 
-  .card{background:#fff; border:1px solid var(--line); border-top:0;
+  .el-card{background:#fff; border:1px solid var(--line); border-top:0;
     border-radius:0 0 14px 14px; padding:24px 22px 26px; margin-bottom:26px;}
   .f{margin-bottom:18px;}
   .f > label{display:block; font-size:16px; font-weight:700; color:var(--navy); margin-bottom:7px;}
-  .f .hint{font-size:13px; font-weight:400; color:#7A8494; margin-left:4px;}
+  .f .el-hint{font-size:13px; font-weight:400; color:#7A8494; margin-left:4px;}
   select, input[type=number]{width:100%; font-size:16px; padding:12px 14px;
     border:1px solid #CCD2DB; border-radius:8px; background:#fff; color:#242424; font-family:inherit;}
   select:focus, input:focus{outline:none; border-color:var(--green);}
   .note{margin:7px 0 0; font-size:13px; color:#7A8494; line-height:1.65;}
-  .btn{width:100%; font-family:inherit; font-size:18px; font-weight:800; color:#fff;
+  .el-btn{width:100%; font-family:inherit; font-size:18px; font-weight:800; color:#fff;
     background:var(--green); border:0; border-radius:8px; padding:16px; cursor:pointer; margin-top:6px;}
-  .btn:hover{background:var(--green-d);}
+  .el-btn:hover{background:var(--green-d);}
   .err{margin:10px 0 0; font-size:14px; color:var(--red);}
 
   .res{margin-bottom:26px;}
@@ -62,19 +78,33 @@
   .band > p.s{margin:0 0 14px 16px; font-size:14px; color:#7A8494;}
   .band.no > h2{border-left-color:#B9C0CC;}
 
-  .row{border:1px solid var(--line); border-radius:10px; padding:14px 16px; margin-bottom:10px;}
-  .row.ok{border-left:5px solid var(--green); background:#F7FCF9;}
-  .row.no{border-left:5px solid #C9CFD9; background:#FAFBFC;}
-  .row .nm{font-size:16px; font-weight:800; color:var(--navy); margin-bottom:3px;}
-  .row .nm em{font-style:normal; font-size:12px; font-weight:700; padding:2px 7px;
+  .el-row{border:1px solid var(--line); border-radius:10px; padding:14px 16px; margin-bottom:10px;}
+  .el-row.ok{border-left:5px solid var(--green); background:#F7FCF9;}
+  .el-row.no{border-left:5px solid #C9CFD9; background:#FAFBFC;}
+  .el-row .nm{font-size:16px; font-weight:800; color:var(--navy); margin-bottom:3px;}
+  .el-row .nm em{font-style:normal; font-size:12px; font-weight:700; padding:2px 7px;
     border-radius:4px; margin-left:5px; vertical-align:middle; color:#fff;}
   .e-safe{background:var(--c-safe);} .e-danger{background:var(--c-danger);} .e-fire{background:var(--c-fire);}
-  .row .rs{font-size:14px; color:#3A4250; margin:0 0 6px;}
-  .row .rs b{color:var(--navy);}
-  .row .strat{margin:8px 0 0; padding-left:17px; font-size:14px;}
-  .row .strat li{margin:4px 0;}
-  .row .strat b{color:var(--amber);}
-  .row .best{color:var(--green); font-weight:800;}
+  .el-row .rs{font-size:14px; color:#3A4250; margin:0 0 6px;}
+  .el-row .rs b{color:var(--navy);}
+  .el-row .strat{margin:8px 0 0; padding-left:17px; font-size:14px;}
+  .el-row .strat li{margin:4px 0;}
+  .el-row .strat b{color:var(--amber);}
+  .el-row .best{color:var(--green); font-weight:800;}
+
+  .el-warn{background:#FFFBEF; border:1px solid #F0DFA8; border-radius:10px;
+    padding:15px 17px; margin-bottom:14px; font-size:14px; line-height:1.7;}
+  .el-warn h4{margin:0 0 6px; font-size:15px; color:#8A6A00;}
+  .el-warn b{color:#8A6A00;}
+
+  .guide{background:#fff; border:1px solid var(--line); border-radius:12px;
+    padding:20px 20px 18px; margin-bottom:14px;}
+  .guide h3{margin:0 0 4px; font-size:17px; color:var(--navy);
+    padding-left:11px; border-left:5px solid var(--navy);}
+  .guide p.s{margin:0 0 14px 16px; font-size:14px; color:#7A8494;}
+  .guide table{margin-bottom:10px;}
+  .bad{color:var(--red); font-weight:700;}
+  .good{color:var(--green-d); font-weight:700;}
 
   .course{background:#EEF7F1; border:1px solid #CFE6D8; border-radius:8px;
     padding:11px 13px; margin-top:9px; font-size:14px; line-height:1.75;}
@@ -109,15 +139,28 @@
   th{background:var(--navy); color:#fff; padding:9px 8px; text-align:center; font-size:13px;}
   td{padding:9px 8px; border-bottom:1px solid #EDF0F4; vertical-align:top;}
   td:first-child{white-space:nowrap; font-weight:700; background:#F7F9FC; text-align:center;}
-  .src{font-size:13px; color:#8A93A0; margin:0 0 4px;}
+  .ctr{text-align:center;}
+  .yes{color:var(--green-d); font-weight:800;}
+  .no2{color:var(--red); font-weight:800;}
+  .el-src{font-size:13px; color:#8A93A0; margin:0 0 4px;}
   .disc{margin:16px 0 0; padding-top:14px; border-top:1px dashed var(--line);
     font-size:13px; color:#7A8494;}
   .foot{text-align:center; font-size:13px; color:#98A0AC; margin-top:26px;}
   @media (max-width:480px){ .hd h1{font-size:20px;} th,td{font-size:13px; padding:8px 6px;} }
+
+  /* ── 탈락고객 확보 블록 ── */
+  .nurture{margin-top:22px;background:#fff;border:2px solid #1B2740;border-radius:12px;padding:24px}
+  .nurture h3{margin:0 0 8px;font-size:18px;letter-spacing:-.5px;color:#1B2740}
+  .nurture .s{margin:0 0 14px;font-size:15px;color:#4B5563;line-height:1.7}
+  .nurture-list{margin:0 0 18px;padding-left:18px;font-size:15px;color:#4B5563;line-height:1.9}
+  .nurture-list strong{color:#1B2740}
+  .nurture-cta{display:flex;gap:8px;flex-wrap:wrap}
+  .nurture-cta .b1{flex:1;min-width:180px}
+  .nurture .el-src{margin:14px 0 0}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="el-wrap">
 
   <div class="hd">
     <div class="tag-wrap">
@@ -125,10 +168,10 @@
       <span class="tag">지행재직업전문학교</span>
     </div>
     <h1>안전 3종 응시자격 자가진단<br><span style="font-size:16px;font-weight:600;color:#C4CEDD">산업안전 · 위험물 · 소방설비 6개 등급</span></h1>
-    <p>한 번만 입력하면 <strong>6개 등급 전부</strong>를 판정하고, 지금 등록 가능한 과정까지 안내합니다.</p>
+    <p>경력은 <strong>년수보다 어느 분야였는지</strong>가 먼저입니다. 종목마다 인정 범위가 다릅니다.</p>
   </div>
 
-  <div class="card" id="form">
+  <div class="el-card" id="form">
     <div class="f">
       <label for="edu">① 최종 학력</label>
       <select id="edu">
@@ -142,51 +185,136 @@
     </div>
 
     <div class="f">
-      <label for="major">② 전공 계열 <span class="hint">학과명이 아니라 배운 과목으로 판단합니다</span></label>
+      <label for="major">② 전공 계열 <span class="el-hint">학과명이 아니라 이수 과목으로 판단합니다</span></label>
       <select id="major">
         <option value="">선택하세요</option>
-        <option value="safety">안전·보건 계열 (안전공학·산업안전·보건안전 등)</option>
-        <option value="chem">화학·화공 계열</option>
-        <option value="fire">소방·전기·기계 계열</option>
-        <option value="etc_eng">기타 공학 계열 (건설·토목·건축·조선·환경 등)</option>
-        <option value="none">그 외 전공 · 해당 없음 (인문·상경·예체능 등)</option>
+        <option value="m_safe">안전·보건 계열 (안전공학·산업안전공학·보건안전학 등)</option>
+        <option value="m_fire">소방 계열 (소방안전관리학·소방학 등)</option>
+        <option value="m_em">전기·전자·기계 계열</option>
+        <option value="m_chem">화학·화공 계열</option>
+        <option value="m_eng">기타 공학 계열 (건설·토목·건축·조선·환경 등)</option>
+        <option value="m_none">그 외 전공 (인문·상경·예체능 등) · 해당 없음</option>
       </select>
-      <p class="note">안전공학·소방학·화학공학·전기전자·기계공학 등은 대체로 관련학과로 인정됩니다. 최종 판단은 이수 과목 기준이라 큐넷 확인을 권합니다.</p>
+      <p class="note">관련학과 인정은 학과 명칭이 아니라 이수한 교육과정 기준이며, 종목마다 지정 학과 목록이 다릅니다. 이 진단은 대표적인 경우를 기준으로 계산하므로 <strong>큐넷 응시자격 자가진단</strong>에서 최종 확인하시기 바랍니다.</p>
     </div>
 
     <div class="f">
-      <label for="cert">③ 보유한 국가기술자격 <span class="hint">동일·유사 직무분야 기준</span></label>
+      <label for="cert">③ 보유한 국가기술자격 <span class="el-hint">동일·유사 직무분야 종목만</span></label>
       <select id="cert">
         <option value="">선택하세요</option>
         <option value="none">없음</option>
-        <option value="craft">기능사 (위험물기능사·가스기능사 등)</option>
+        <option value="craft">기능사 (위험물기능사·가스기능사·용접기능사 등)</option>
         <option value="ind">산업기사</option>
         <option value="eng">기사</option>
       </select>
+      <p class="note">산업안전 분야에는 기능사 등급이 없습니다. '산업안전기능사'라는 자격은 존재하지 않으며, 여기서 말하는 기능사는 동일·유사 직무분야의 다른 종목을 뜻합니다.</p>
     </div>
 
     <div class="f">
-      <label for="exp">④ 동일·유사 직무분야 실무경력 <span class="hint">년 단위, 없으면 0</span></label>
+      <label for="field">④ 실무경력의 <u>직무분야</u> <span class="el-hint">가장 오래 일한 분야 하나</span></label>
+      <select id="field">
+        <option value="">선택하세요</option>
+        <option value="noexp">실무경력 없음</option>
+        <option value="safe">안전관리 — 안전관리·비파괴검사</option>
+        <option value="chem">화학 — 화공·위험물 취급</option>
+        <option value="prod">생산관리 — 제조 생산·공정·품질관리</option>
+        <option value="mach">기계 — 기계제작·설비설치·철도·조선·항공·자동차·금형</option>
+        <option value="mat">재료 — 금속재료·판금제관·단조주조·용접·도장도금</option>
+        <option value="elec">전기·전자</option>
+        <option value="const">건설 — 건축·토목·조경·도시교통·건설배관·건설기계운전</option>
+        <option value="env">환경·에너지</option>
+        <option value="ict">정보통신</option>
+        <option value="food">식품가공</option>
+        <option value="tex">섬유·의복</option>
+        <option value="wood">인쇄·목재·가구·공예</option>
+        <option value="agri">농림어업</option>
+        <option value="mine1">광업자원 — 채광</option>
+        <option value="mine2">광업자원 — 광해방지</option>
+        <option value="none">그 외 — 사무·회계·인사·영업판매·운수·음식·보건의료·복지 등</option>
+      </select>
+      <p class="note">회사의 업종이 아니라 <strong>내가 실제로 한 업무</strong>를 기준으로 고르세요. 같은 회사 소속이어도 담당 업무에 따라 분야가 달라집니다. 사무직 중에서는 <strong>생산관리 업무만</strong> 인정됩니다.</p>
+    </div>
+
+    <div class="f">
+      <label for="exp">⑤ 그 분야의 실무경력 <span class="el-hint">년 단위, 없으면 0</span></label>
       <input type="number" id="exp" min="0" max="40" step="1" placeholder="예: 2" inputmode="numeric">
-      <p class="note">인정 예 — 안전관리자·안전보건 담당 / 제조 현장 생산·설비·품질관리 / 건설현장 공무·안전 / 소방·전기·가스·위험물 취급·설비 관리<br>
-      경력 인정 여부는 <strong>직위나 부서명이 아니라 실제 수행한 업무를 기준으로 한국산업인력공단이 심사</strong>합니다. 내 경력이 해당되는지 애매하면 원서 접수 전에 <strong>큐넷 응시자격 자가진단</strong> 또는 <strong>고객센터 1644-8000</strong>으로 미리 확인하세요.</p>
     </div>
 
     <div class="f">
-      <label for="credit">⑤ 학점은행제 이수 학점 <span class="hint">해당 없으면 0</span></label>
+      <label for="milForce">⑥ 군 복무 경력 <span class="el-hint">해당 없으면 비워 두세요</span></label>
+      <select id="milForce">
+        <option value="">해당 없음 · 군 경력을 넣지 않겠습니다</option>
+        <option value="army">육군</option>
+        <option value="navy">해군</option>
+        <option value="air">공군</option>
+        <option value="marine">해병대</option>
+      </select>
+      <div id="milBox" hidden style="margin-top:10px">
+        <input type="text" id="milSpec" list="milList" placeholder="특기명을 입력하세요 (예: 화생방)" autocomplete="off">
+        <datalist id="milList"></datalist>
+        <p class="note" id="milHit" style="margin-top:6px"></p>
+        <input type="number" id="milMon" min="0" max="480" step="1" placeholder="복무 개월 수 (예: 18)" inputmode="numeric" style="margin-top:8px">
+        <p class="note"><strong>기초군사훈련 기간은 빼고</strong> 특기를 부여받은 뒤의 기간만 넣으십시오. 전역 후 증빙은 <strong>병적증명서</strong> 또는 <strong>경력증명서</strong>로 합니다.</p>
+      </div>
+    </div>
+
+    <div class="f">
+      <label for="credit">⑦ 학점은행제 이수 학점 <span class="el-hint">해당 없으면 0</span></label>
       <input type="number" id="credit" min="0" max="200" step="1" placeholder="예: 0" inputmode="numeric">
     </div>
 
-    <button type="button" class="btn" id="go">6개 등급 한 번에 확인하기</button>
-    <p class="err" id="err" hidden>①~⑤를 모두 입력·선택해 주세요.</p>
+    <button type="button" class="el-btn" id="go">6개 등급 한 번에 확인하기</button>
+    <p class="err" id="err" hidden>①~⑤와 ⑦을 모두 입력·선택해 주세요. ⑥ 군 복무는 해당하실 때만 넣으시면 됩니다.</p>
   </div>
 
   <div class="res" id="res" hidden></div>
 
+  <!-- 정적 기준표 : 도구를 쓰지 않아도 정보가 전달되도록 병기 -->
   <div class="ref">
-    <h2>등급별 응시자격 기준</h2>
-    <p class="sub">아래 조건 중 <strong>하나만 충족</strong>하면 응시할 수 있습니다.</p>
+    <h2>경력 인정 범위는 종목마다 다릅니다</h2>
+    <p class="el-sub">산업안전·소방설비는 <strong>안전관리(25)</strong> 분야, 위험물은 <strong>화학(18)</strong> 분야에 속합니다. 그래서 인정되는 경력 범위가 다릅니다.</p>
 
+    <table>
+      <thead><tr><th>내 경력 분야</th><th>산업안전<br>소방설비</th><th>위험물</th></tr></thead>
+      <tbody>
+        <tr><td>안전관리·비파괴검사</td><td class="ctr yes">동일</td><td class="ctr yes">○</td></tr>
+        <tr><td>화학·화공·위험물</td><td class="ctr yes">○</td><td class="ctr yes">동일</td></tr>
+        <tr><td>생산관리(제조)</td><td class="ctr yes">○</td><td class="ctr yes">○</td></tr>
+        <tr><td>기계</td><td class="ctr yes">○</td><td class="ctr yes">○</td></tr>
+        <tr><td>재료</td><td class="ctr yes">○</td><td class="ctr yes">○</td></tr>
+        <tr><td>섬유·의복</td><td class="ctr yes">○</td><td class="ctr yes">○</td></tr>
+        <tr><td>환경·에너지</td><td class="ctr yes">○</td><td class="ctr yes">○</td></tr>
+        <tr><td>광업자원(채광)</td><td class="ctr yes">○</td><td class="ctr yes">○</td></tr>
+        <tr><td>광업자원(광해방지)</td><td class="ctr yes">○</td><td class="ctr no2">✗</td></tr>
+        <tr><td>건설</td><td class="ctr yes">○</td><td class="ctr no2">✗</td></tr>
+        <tr><td>전기·전자</td><td class="ctr yes">○</td><td class="ctr no2">✗</td></tr>
+        <tr><td>정보통신</td><td class="ctr yes">○</td><td class="ctr no2">✗</td></tr>
+        <tr><td>식품가공</td><td class="ctr yes">○</td><td class="ctr no2">✗</td></tr>
+        <tr><td>인쇄·목재·가구·공예</td><td class="ctr yes">○</td><td class="ctr no2">✗</td></tr>
+        <tr><td>농림어업</td><td class="ctr yes">○</td><td class="ctr no2">✗</td></tr>
+        <tr><td>사무·회계·인사·영업판매<br>운수·음식·보건의료·복지</td><td class="ctr no2">✗</td><td class="ctr no2">✗</td></tr>
+      </tbody>
+    </table>
+    <p class="el-src">※ 자료: 국가기술자격법 시행규칙 [별표 11의2] 유사 직무분야(제10조의2제1항 관련), 개정 2019. 6. 11. / 한국산업인력공단 큐넷 '응시자격 인정범위'.</p>
+
+    <h2 style="margin-top:24px">군 복무 경력도 실무경력으로 인정됩니다</h2>
+    <p class="el-sub">한국산업인력공단은 <strong>군 특기별로 어느 직무분야에 해당하는지</strong>를 표로 정해 두고 있습니다. 그 직무분야가 인정 범위에 들면 <strong>복무기간이 그대로 실무경력</strong>이 됩니다. 다만 <strong>기초군사훈련 기간은 제외</strong>합니다.</p>
+
+    <table>
+      <thead><tr><th>군</th><th>산업안전·소방설비에 <b>동일</b> 직무분야(25.안전관리)</th><th>위험물에 <b>동일</b> 직무분야(18.화학)</th></tr></thead>
+      <tbody>
+        <tr><td>육군</td><td>군사경찰, 수사, 소방장비, 의무, 의정, 물리치료, 방사선, 물리분석</td><td>화생방, 화생방작전, 화생방제독, 화생방정찰, 화생방장비정비, 탄약, 탄약관리, 탄약검사, 탄약정비, 폭발물처리, 특전폭파, 연료관리, 연막, 약제, 화학분석</td></tr>
+        <tr><td>해군</td><td>병기, 무장, 시설, 의무, 간호, 군의, 치의, 치무, 병리, 보건, 의공, 의정, 재활치료, 방사선, 물리분석</td><td>탄약, 탄약취급, 화생방, 화학분석</td></tr>
+        <tr><td>공군</td><td>안전, 항공안전, 소방, 소방구조, 항공구조, 항공기초과저지, 비파괴검사, 의무, 항공의무, 간호, 치의, 의정, 병리, 보건, 방사선, 물리분석</td><td>화생방, 화학분석</td></tr>
+        <tr><td>해병대</td><td>시설, 병리, 치무, 재활치료, 방사선, 물리분석</td><td>화생방, 화생방장비, 탄약, 폭발물처리, 화학분석</td></tr>
+      </tbody>
+    </table>
+    <p class="el-src">※ 위 표는 <strong>동일 직무분야로 잡히는 대표 특기</strong>만 추린 것입니다. 기계·재료·전기·건설 등 <strong>유사 직무분야로 인정되는 특기는 훨씬 많습니다</strong>(예: 육군 기계 분야만 150개가 넘습니다). 위 진단기 ⑥번에 군과 특기명을 넣으시면 전체 표에서 찾아 자동으로 판정합니다.</p>
+    <p class="el-src">※ 자료: 한국산업인력공단 「국가기술자격검정 직무분야별 육군·해군·공군·해병대 특기 경력인정 범위」. 기준일 — 육군 2026년 2월, 해군 2025년 2월 18일, 공군 2025년 2월 17일, <strong>해병대 2022년 8월</strong>(가장 오래된 자료이므로 해병대 출신은 공단 확인을 권합니다).</p>
+    <p class="el-src">※ 군별로 같은 이름의 특기가 다른 직무분야에 들어가는 경우가 있습니다. 예를 들어 <strong>간호는 해군·공군에서는 25.안전관리로 잡히지만 육군에서는 06.보건·의료</strong>여서 인정되지 않습니다. 반드시 본인이 복무한 군의 표로 확인하십시오.</p>
+
+    <h2 style="margin-top:24px">등급별 응시자격 기준</h2>
+    <p class="el-sub">아래 조건 중 <strong>하나만 충족</strong>하면 응시할 수 있습니다.</p>
     <table>
       <thead><tr><th>등급</th><th>해당 종목</th><th>응시자격</th></tr></thead>
       <tbody>
@@ -197,55 +325,141 @@
     </table>
 
     <h2 style="margin-top:24px">종목별 등급 구성</h2>
-    <p class="sub">종목마다 있는 등급이 다릅니다.</p>
+    <p class="el-sub">종목마다 있는 등급이 다릅니다.</p>
     <table>
       <thead><tr><th>종목</th><th>기능사</th><th>산업기사</th><th>기사</th></tr></thead>
       <tbody>
-        <tr><td>산업안전</td><td style="text-align:center">없음</td><td style="text-align:center">○</td><td style="text-align:center">○</td></tr>
-        <tr><td>위험물</td><td style="text-align:center"><strong>○</strong></td><td style="text-align:center">○</td><td style="text-align:center">없음<br><span style="font-size:12px;color:#8A93A0">(상위는 기능장)</span></td></tr>
-        <tr><td>소방설비</td><td style="text-align:center">없음</td><td style="text-align:center">○</td><td style="text-align:center">○</td></tr>
+        <tr><td>산업안전</td><td class="ctr">없음</td><td class="ctr">○</td><td class="ctr">○</td></tr>
+        <tr><td>위험물</td><td class="ctr"><strong>○</strong></td><td class="ctr">○</td><td class="ctr">없음<br><span style="font-size:12px;color:#8A93A0">(상위는 기능장)</span></td></tr>
+        <tr><td>소방설비</td><td class="ctr">없음</td><td class="ctr">○</td><td class="ctr">○</td></tr>
       </tbody>
     </table>
-    <p class="src">※ 소방설비는 <strong>전기분야·기계분야</strong>로 나뉘며, 응시자격은 동일합니다.</p>
-    <p class="src">※ 자료: 한국산업인력공단 큐넷(q-net.or.kr) 응시자격 기준, 국가기술자격법 시행령. 2026년 기준.</p>
+    <p class="el-src">※ 소방설비는 <strong>전기분야·기계분야</strong>로 나뉘며, 응시자격은 동일합니다.</p>
+    <p class="el-src">※ 자료: 한국산업인력공단 큐넷(q-net.or.kr) 응시자격 기준, 국가기술자격법 시행령 별표 4의2. 2026년 기준.</p>
 
     <p class="disc">
       이 진단은 <strong>대표적인 응시자격 경로를 기준으로 한 참고용 안내</strong>입니다.
-      학과의 관련성 인정 범위, 실무경력의 직무 인정 여부, 학점 인정 등은 개별 심사에서 달라질 수 있습니다.
-      <strong>최종 판정은 큐넷 회원가입 후 '응시자격 자가진단'</strong>에서 확인하시고,
+      경력의 직무분야 판정, 학과의 관련성 인정 범위, 학점 인정 등은
+      <strong>한국산업인력공단이 개별 심사</strong>하며 결과가 달라질 수 있습니다.
+      <strong>최종 확인은 큐넷 회원가입 후 '응시자격 자가진단'</strong>에서 하시고,
       판단이 어려우면 <strong>고객센터 1644-8000</strong>으로 문의하세요.
       원서 접수 시 경력증명서·졸업증명서 제출 기한을 놓치지 않도록 주의하시기 바랍니다.
+      <strong>군 복무 경력은 병적증명서 등으로 증빙</strong>해야 하며, 특기 명칭과 복무기간이 서류에 그대로 드러나야 합니다.
     </p>
   </div>
 
-  <p class="foot">© 2026 지행재직업전문학교 · 울산 남구 북부순환도로 17</p>
+  <p class="foot"><a href="https://www.jhj.education/" style="color:#6B7280">← 지행재직업전문학교 홈으로</a><br>© 2026 지행재직업전문학교 · 울산 남구 북부순환도로 17</p>
 </div>
 
 <script>
 (function(){
+
+(function(){
   var $ = function(id){ return document.getElementById(id); };
 
+  /* ============================================================
+     ★① 모집중인 과정 — 회차마다 이 부분만 고치면 됩니다
+        status : "모집중" | "예정" | "마감"
+     ============================================================ */
   var COURSES = {
-    "위험물기능사":     { status:"모집중", open:"", weeks:"", time:"", cost:"", link:"" },
-    "위험물산업기사":   { status:"모집중", open:"", weeks:"", time:"", cost:"", link:"" },
-    "산업안전산업기사": { status:"모집중", open:"", weeks:"", time:"", cost:"", link:"" },
-    "소방설비산업기사": { status:"모집중", open:"", weeks:"", time:"", cost:"", link:"" },
-    "산업안전기사":     { status:"모집중", open:"", weeks:"", time:"", cost:"", link:"" },
-    "소방설비기사":     { status:"모집중", open:"", weeks:"", time:"", cost:"", link:"" }
+    "위험물기능사":     { status:"모집중", open:"", weeks:"", time:"", cost:"" },
+    "위험물산업기사":   { status:"모집중", open:"", weeks:"", time:"", cost:"" },
+    "산업안전산업기사": { status:"모집중", open:"", weeks:"", time:"", cost:"" },
+    "소방설비산업기사": { status:"모집중", open:"", weeks:"", time:"", cost:"" },
+    "산업안전기사":     { status:"모집중", open:"", weeks:"", time:"", cost:"" },
+    "소방설비기사":     { status:"모집중", open:"", weeks:"", time:"", cost:"" }
   };
 
-  var KAKAO = "https://pf.kakao.com/_bnxnAX";
+  var KAKAO = "https://talk.naver.com/w1lkxd7?utm_source=jindan&utm_medium=tool&utm_campaign=safety3"; /* 카카오 채널 보류(2026-10-29) → 네이버 톡톡 */
   var HOME  = "https://www.jhj.education/?utm_source=jindan&utm_medium=tool&utm_campaign=safety3";
   var TEL   = "tel:0522673172";
   var CARD  = "https://www.work24.go.kr";
 
-  var SUBJ  = {
-    "위험물기능사":"danger", "위험물산업기사":"danger",
-    "산업안전산업기사":"safe", "산업안전기사":"safe",
-    "소방설비산업기사":"fire", "소방설비기사":"fire"
+  /* ── 경력 직무분야 인정표 (별표 11의2) ──
+     s = 안전관리(251) 종목군 : 산업안전·소방설비
+     h = 화학(182) 종목군     : 위험물
+     2 = 동일 직무분야 / 1 = 유사 직무분야 / 0 = 미인정              */
+  var FIELD = {
+    noexp:{ s:0, h:0, t:"실무경력 없음" },
+    safe :{ s:2, h:1, t:"안전관리" },
+    chem :{ s:1, h:2, t:"화학·화공·위험물" },
+    prod :{ s:1, h:1, t:"생산관리" },
+    mach :{ s:1, h:1, t:"기계" },
+    mat  :{ s:1, h:1, t:"재료" },
+    tex  :{ s:1, h:1, t:"섬유·의복" },
+    env  :{ s:1, h:1, t:"환경·에너지" },
+    mine1:{ s:1, h:1, t:"광업자원(채광)" },
+    mine2:{ s:1, h:0, t:"광업자원(광해방지)" },
+    const:{ s:1, h:0, t:"건설" },
+    elec :{ s:1, h:0, t:"전기·전자" },
+    ict  :{ s:1, h:0, t:"정보통신" },
+    food :{ s:1, h:0, t:"식품가공" },
+    wood :{ s:1, h:0, t:"인쇄·목재·가구·공예" },
+    agri :{ s:1, h:0, t:"농림어업" },
+    none :{ s:0, h:0, t:"그 외(사무·영업·서비스 등)" }
   };
-  var LABEL = { safe:"산업안전", danger:"위험물", fire:"소방설비" };
-  var okList = [];
+
+  /* ── 전공 계열 인정도 ──  2 = 인정 가능성 높음 / 1 = 확인 필요 / 0 = 비관련 */
+  var MAJOR = {
+    m_safe:{ s:2, h:1 }, m_fire:{ s:2, h:1 }, m_em:{ s:2, h:1 },
+    m_chem:{ s:1, h:2 }, m_eng:{ s:1, h:1 }, m_none:{ s:0, h:0 }
+  };
+
+  /* ── 군 특기 → 직무분야 대응표 ──
+     자료: 한국산업인력공단 「국가기술자격검정 직무분야별 ○○ 특기 경력인정 범위」
+     육군 2026.02 · 해군 2025.02.18 · 공군 2025.02.17 · 해병대 2022.08 기준
+     값은 위 FIELD 의 키와 같습니다. 쉼표는 두 직무분야에 걸친 특기입니다.
+     ★ 갱신 시 이 블록만 교체하면 됩니다.                              */
+var MIL_SPEC={
+"army":{"AH-1S정비":"mach","AH-64 정비":"mach","CH-47 정비":"mach","EA 운용":"ict","ES 운용":"ict","K-21보병전투차량부대정비":"mach","K-21보병전투차량승무":"mach","K-53계열 차량운전":"mach","K-55자주포정비":"mach","K-55자주포조종":"mach","K239 포병":"ict,mach","K9자주포조종":"mach","K9자주포화포/장갑정비":"mach","KUH-1정비":"mach","K계열 전차 부대정비":"mach","K계열 전차승무":"mach","K계열 전차조종":"mach","M/A 포병":"ict","MC군사경찰":"mach","MW운용/정비":"ict","M계열 전차 부대정비":"mach","M계열 전차승무":"mach","SW개발":"ict","TOD/라지트운용":"ict","UAV운용":"mach","UAV정비":"mach","UH-1H 정비":"mach","UH-60 정비":"mach","간호":"none","간호조무사":"none","감시장비운용":"ict","감시장비정비":"mach","건축":"const","견인차량운전":"mach","견인포병":"mach","견인포정비":"mach","공격헬기정비":"mach","공기압축기 운용":"const","공병":"const","공병장비부대정비":"mach","공병장비운용 및 정비":"mach","공병장비운용/정비":"mach","공병장비정비":"mach","공병중장비정비":"mach","공보정훈":"none","과학화전투훈련":"ict","관재":"const","광학 및 감시장비 정비":"mach","광학/감시장비정비":"mach","광학기재정비":"mach","교량가설보트운전":"const","교량전차 조종":"const","교량전차조종":"const","교환":"ict","교환시설운용/정비":"ict","구난차량운전":"mach","국악":"none","군사경찰":"ict,safe","군사정보":"ict,none","군수":"mach,prod","군악":"none","군의":"none","군종":"none","군종행정":"none","굴삭기운용":"const","굴착기 운용":"const","궤도차량정비":"mach","그레이더 운용":"const","기갑":"mach","기계":"mach","기관":"mach","기동헬기운용":"mach","기동헬기정비":"elec,mach","기상관":"env","기술정보":"ict","낙하산정비":"tex","네트워크 운용/정비":"ict","다련장 운용/정비":"mach","다목적 굴착기 운전":"const","다중무선장비정비":"ict","대공포/유도무기정비":"mach","대공포정비":"mach","대전차유도무기정비":"mach","대전차유도탄":"mach","대전차화기":"mach","대형차량운전":"mach","도저 운용":"const","도하장비 조종":"const","드론/UAV운용":"mach","드론운용/정비":"mach","땅굴탐지":"elec","레이다 영상분석":"ict","레이다 운용/정비":"ict","레이다운용 및 정비":"ict","레이다정비":"ict","로더운전":"const","로켓무기정비":"mach","로켓정비":"mach","로켓포병":"mach","로켓포사격지휘":"ict","롤러 운용":"const","목공":"const","무선운용 밎 정비":"ict","무선장비검사 및 정비":"ict","무선장비정비":"ict","무선전송장비 운용/정비":"ict","무인항공정찰기 운용":"mach","물리분석":"safe","물리치료":"safe","물자근무지원":"mach","물자보급":"prod","박격포":"mach","반송기운용 및 정비":"ict","발전기 운용/정비":"mach","발전기정비":"mach","발칸운용/정비":"mach","발칸포정비":"mach","방공":"mach","방공/유도무기정비":"mach","방공대공포 정비":"mach","방공레이더 운용/정비":"mach","방공레이더정비":"mach","방공무기운용":"mach","방공유도무기정비":"mach","방공작전통제":"ict","방사선":"safe","방첩":"ict","배관/기계설비":"const","법무":"none","법무행정":"none","병기":"mach","병리":"none","병참":"prod","병참장비정비":"mach","보건":"none","보건의료정보관리":"ict","보병":"mach","보안":"ict","보안장비정비":"mach","비호운용/정비":"mach","비호정비":"mach","사격지휘":"ict","사서":"ict","사어버·정보체계운용":"ict","사이버":"ict","사이버작전":"ict","사이버전문":"ict","사이버정보체계운용":"ict","사진운용/정비":"wood","선박운용":"mach","소방장비":"safe","소총":"mach","소형차량운전":"mach","수사":"safe","수송":"mach","수송운용":"mach","수의":"none","시설":"mach","시설공병":"const","식품검사":"food","신호정보":"ict","신호정보/전저전운용":"ict","실용음악":"none","안경":"elec","암호운용":"ict","암호장비정비":"ict","암호체계관리":"ict","야전건설":"const","야전공병":"const","야전포병":"mach","야전포병정비":"mach","약무":"chem","약제":"chem","양악":"none","연료관리":"chem","연막":"chem","영상":"wood","영상정보":"ict","영상제작":"none","영양관리":"food","영현등록":"none","오리콘운용/정비":"mach","오리콘포정비":"mach","용접":"mat","용접 및 철물 정비":"mat","용접/기계공작":"mat","운전":"mach","위성/MW운용":"ict","위성운용/정비":"ict","유도무기":"mach","유도무기정비":"mach","유선운용 및 정비":"ict","유선장비정비":"ict","응급구조사":"none","의공":"mach","의무":"safe","의무기록":"ict","의무보급":"prod","의무장비정비":"mach","의정":"safe","이동관리":"ict","이동통신장비운용/정비":"ict","이미용":"none","인간정보":"ict","인사":"wood","인사행정":"wood","인쇄":"wood","일반기계":"mach","일반보병":"mach","일반의무":"none","일반장비정비":"mach","일반행정":"ict","임상병리":"none","자동측지 운용/정비":"mach","자동화체계운용 및 정비":"ict","자주포 야전정비":"mach","자주포장갑정비":"mach","자주포정비":"mach","자주포조종":"mach","장갑전투도저 조종":"const","장갑차":"mach","장갑차 야전정비":"mach","장갑차 조종":"mach","장갑차부대정비":"mach","장비보급정비":"mach","장비수리부속공구보급":"prod","장비수리부속관리":"prod","장비수리부속보급":"prod","장애물개척전차조종":"mach","장애물운용(E)":"chem","장애물운용(M)":"chem","재정":"none","재정회계":"none","재활치료":"none","저고도레이다정비":"ict","전기":"elec","전기설비":"elec","전력화":"ict","전문간호":"none","전문물리치료":"safe","전문방사선촬영":"safe","전문약제":"none","전문임상병리":"none","전문치과":"none","전산":"ict","전술C4I운용/정비":"ict","전술통신운용":"ict","전술통신장비운용/정비":"ict","전술통신정비":"ict","전자":"elec","전장이동통제":"ict","전차":"mach","전차 및 장갑차 정비":"mach","전차/장갑차정비":"mach","전차승무":"mach","전차정비":"mach","전차통신정비":"ict","전투공병":"const","전투장갑도쟈운용":"const","정보":"ict","정보보호":"ict","정보전문":"ict","정보체계기술":"ict","정보체계운용정비":"ict","정보통신":"ict","정보통신망 관리장비 운용/정비":"ict","정보통신망관리":"ict","정보화":"ict","정비":"mach","정수장비 운용":"const","정찰":"ict","정훈":"none","조경":"const","조리":"food","주조(금속)":"mat","중계기":"ict","중장비정비":"mach","중형차량운전":"mach","지게차 운전":"const","지도":"const","지원보급":"ict","지형분석":"const","차량":"mach","차량부대정비":"mach","차량정비":"mach","차륜형장갑차운전":"mach","천마운용/정비":"mach","천마정비":"mach","천호운용/정비":"mach","총기정비":"mach","총포":"mach","총포정비":"mach","측지":"const","치과":"none","치기공":"mach","치무":"none","치위생":"none","치의":"none","크레인 운용":"const","크레인차량 운전":"const","탄약":"chem","탄약검사":"chem","탄약관리":"chem","탄약정비":"chem","토목":"const","통신":"ict","통신보조":"ict","통신전자정비":"ict","특수통신운용":"ict","특수통신장비정비":"ict,mach","특수통신정비":"ict","특임군사경찰":"none","특임보병":"mach","특전":"chem,ict,mach","특전보병":"mach","특전의무":"none","특전장비정비":"mach","특전정작":"ict","특전통신":"ict","특전폭파":"chem","특전화기":"mach","편성보급":"prod","포병":"mach","포병레이더":"ict","포병측지":"const,env","포병탐지레이다 운용 및 정비":"mach","포병표적":"mach","폭발물처리":"chem","표적탐지레이더정비":"mach","항공":"mach","항공군수":"prod","항공기관":"mach","항공기체":"mach","항공도장":"mat","항공보기":"mach","항공운항":"mach","항공운항/관제":"mach","항공정비":"mach","항공지원":"mach","항만운영":"const","항만운용":"const","헬기무장정비":"mach","헬기통신전자정비":"elec","현무 포병":"mach","현무운용 및 정비":"mach","현무정비":"mach","화력/기동장비정비":"mach","화생방":"chem","화생방물자운용":"chem","화생방작전":"chem","화생방장비 정비":"chem","화생방장비정비":"chem","화생방정찰":"chem","화생방제독":"chem","화포 및 대공포 정비":"mach","화포정비":"mach","화학분석":"chem","환경":"env","휴대용유도무기운용/정비":"mach","휴대용유도탄정비":"mach"},
+"navy":{"간호":"safe","갑판":"const","갑판병":"const","갑판병(이발병)":"none","건축":"const","공병":"const","공병병":"const","공병장비운용병":"mach","교환":"ict","군사경찰":"ict","군사경찰병":"ict","군사정보":"ict","군수":"prod","군악":"none","군악병":"none","군의":"safe","군종":"none","금속":"mat","기계":"mach","기관":"mach","기관병":"mach","기상":"env","기상예보":"env","기술정보":"ict","기체":"mach","대형수송병":"mach","목공":"const","무장":"safe","무장병":"safe","문화홍보병":"none","물리분석":"safe","발간":"wood","방사선":"safe","법무":"none","병기":"safe","병리":"safe","병참":"prod","보건":"safe","보급":"prod","보급병":"prod","사서":"ict","사이버":"ict","사이버·정보체계운용":"ict","사통":"mach","선거":"mach","선체":"mach","손상통제":"mat","손상통제병":"mat","수사":"ict","수송":"mach","수송병":"mach","시설":"safe","약무":"food","영상":"none","영양관리":"food","용접":"mat","운전":"mach","유도무기":"mach","음탐":"ict","의공":"safe","의무":"safe","의무기록":"ict","의무병":"safe","의정":"safe","이미용":"none","인쇄":"wood","일반기계":"mach","일반수송병→수송병":"mach","잠수":"const","잠수병":"const","재정":"none","재활치료":"safe","전기":"elec","전기병":"elec","전산":"ict","전자":"elec","전자기전":"elec","전자기전병":"elec","전차":"mach","전탐":"ict","전탐병":"ict","정보":"ict","정보병":"ict","정보통신":"elec,ict","정보통신병":"ict","정보통신병(전공병)":"ict","정보통신병(전산병)":"ict","정보통신병(통신병)":"ict","정훈":"none","조경":"const","조리":"food","조리병":"food","조타":"mach","조타병":"mach","조함":"mach","지도":"const","차량":"mach","총포":"mach","추진기관":"mach","추진기관병":"mach","치무":"safe","치의":"safe","탄약":"chem","탄약취급":"chem","토목":"const","통신":"ict","통신(통신보조)":"ict","통역":"none","통정":"ict","통정병":"ict","특전":"mine1","특전병":"mine1","특정":"mine1","함정":"mach","함정('12년 이후 임관자)":"mach","함정(기관)('12년 이전 임관자)":"mach","함정(항해)('12년 이전 임관자)":"mach","함정기관":"mach","항공":"mach","항공관제":"mach","항공기관":"mach","항공기체":"mach","항공무장":"mach","항공병":"mach","항공보기":"mach","항공장비":"mach","항공전술":"mach","항공전자":"mach","항공지원":"mach","항해":"const,mach","행정":"none","화생방병":"chem","화학분석":"chem","환경":"env","환경관리":"env"},
+"air":{"간호":"safe","건축":"const","경장갑차운전":"mach","공병":"const","공병건설":"const","공병설비":"mach","공병장비운전":"const","광역전송체계정비 기반통신체계운용":"ict","교환":"ict","군사경찰":"mach","군사정보":"ict","군수":"prod","금속":"mat","기계":"mach","기계설비":"mach","기상":"env","기상관측":"env","기상예보":"env","기상장비정비":"mach","기술정보":"ict","기체":"mach","단/중거리유도무기운용":"mach","단거리유도무기운용":"mach","대공포운용":"mach","목공":"const","무선통신체계정비 작전통신체계운용":"ict","물리분석":"safe","방공유도무기레이더정비":"mach","방공유도무기발사정비":"mach","방공유도무기사격통제정비":"mach","방공유도무기정비":"mach","방공포병":"mach","방공포차량운전":"mach","방사선":"safe","병리":"safe","병참":"prod","보건":"safe","보급수송":"prod","보안체계관리 사이버체계운용":"ict","비파괴검사":"safe","비행제어장비정비":"mach","사서":"ict","사이버·정보체계운용 사이버체계운용":"ict","소방":"safe","소방구조":"safe","수리부속보급관리":"prod","수사":"ict","수송운영":"mach","시설":"const","안전":"safe","영상":"none","영양관리":"food","용접":"mat","운항관제":"mach","유도무기":"mach","유류보급":"prod","유선통신체계정비":"ict","유선통신체계정비 기반통신체계운용":"ict","의공":"safe","의무":"safe","의무기록":"safe","의정":"safe","이미용":"none","인사교육":"ict","인쇄":"wood","일반기계":"mach","일반차량운전":"mach","장거리유도무기발사운용":"mach","장거리유도무기운용":"mach","장거리유도무기추적운용":"mach","장비물자보급":"prod","장비물자보급관리":"prod","재활치료":"safe","전기":"elec","전력설비":"elec","전산":"ict","전술항공통신체계정비 작전통신체계운용":"ict","전자":"elec","정밀측정장비정비":"mach","정보":"ict","정보통신":"ict","정훈":"none","조경":"const","조리":"food","조종":"mach","조종교관":"mach","중거리유도무기발사운용":"mach","중거리유도무기추적운용":"mach","중거리유도무기탐지운용":"mach","지상레이더체계정비 작전통신체계운용":"ict","차량":"mach","차량정비":"mach","치의":"safe","탄약":"mach","토목":"const","토목건축":"const","통신":"ict","특수정보":"ict","특수차량운전":"mach","항공관제":"mach","항공구조":"safe","항공기관":"mach","항공기기관정비":"mach","항공기기체정비":"mach","항공기무기정비":"mach","항공기유압전기정비":"mach","항공기유압정비":"mach","항공기전기정비":"mach","항공기제작정비":"mach","항공기지상장비정비":"mach","항공기초과저지":"safe","항공무기정비":"mach","항공보기":"mach","항공안전":"safe","항공운수":"mach","항공운항":"mach","항공의무":"safe","항공장구정비":"mach","항공전산장비정비":"mach","항공전자장비정비":"mach","항공전자전장비정비":"mach","항공전자제어장비정비":"mach","항공정보운영":"ict","항공지원":"mach","항공탄약정비":"mach","항공통신전자장비정비":"mach","항공통신항법장비정비":"mach","항공통제":"mach","항해":"mach","행정":"ict","화생방":"chem","화학분석":"chem","환경":"env"},
+"marine":{"건축":"const","계산":"mach","공병":"const","공보정훈":"none","교환운영":"ict","군기":"ict","군사경찰":"ict","군사정보":"ict","군수":"prod","군악":"none","궤도장비":"mach","금속":"mat","급양":"food","기갑":"mach","기계공작":"mach","기계운영":"mach","기본보병":"mach","기체":"mach","대공무기":"mach","대전차무기":"mach","대전차화기":"mach","목공운영":"const","물리분석":"safe","박격포":"mach","발간운영":"wood","방공무기운용":"mach","방사선":"safe","변경 : 27-05전산 → 27-02사이버정보체계":"ict","병리":"safe","병참운영":"prod","보급":"prod","보병":"mach","사서":"ict","사이버":"ict","사이버정보체계":"ict","사이버정보체계 삭제":"ict","상륙장갑":"mach","수사":"ict","수색":"const","시설":"safe","시설공병":"const","신호정보":"ict","야포":"mach","약무":"food","영상":"none","영상정보":"ict","영양관리":"food","용접":"mat","운전":"mach","운전운영":"mach","유도·특수무기":"mach","유도무기":"mach","이미용운영":"none","인쇄":"wood","일반기계":"mach","자주포":"mach","자주포정비":"mach","자주포조종":"mach","잠수":"const","장갑차승무":"mach","장비공병":"mach","재정":"none","재활치료":"safe","전기":"elec","전산":"ict","전술통신":"ict","전자":"elec","전자 및 광학장비":"mach","전차":"mach","전차·장갑차":"mach","전차승무":"mach","전차장비":"mach","전차정비":"mach","전탐":"ict","전투공병":"mach","정보":"ict","정보통신":"ict","조경운영":"const","조리운영":"food","조사 및 법무":"none","지도":"const","차량":"mach","차량정비":"mach","총포":"mach","측지":"mach","치무":"safe","탄약":"chem","탄약·폭발물처리":"chem","통기":"ict","통신":"ict","포병":"mach","폭발물처리":"chem","항공":"mach","항공관제":"mach","항공기관":"mach","항공정비":"mach","행정":"none","화생방":"chem","화생방장비":"chem","화학분석":"chem","환경":"env"}
+};
+
+  var FORCE_NM = { army:"육군", navy:"해군", air:"공군", marine:"해병대" };
+
+  /* 군 선택 → 그 군의 특기 목록만 자동완성에 채웁니다 */
+  function fillSpecList(){
+    var f = $("milForce").value, box = $("milBox"), dl = $("milList");
+    box.hidden = !f;
+    $("milHit").innerHTML = "";
+    if(!f){ dl.innerHTML = ""; return; }
+    var names = Object.keys(MIL_SPEC[f]).sort();
+    dl.innerHTML = names.map(function(n){ return '<option value="'+n+'">'; }).join("");
+  }
+  $("milForce").addEventListener("change", fillSpecList);
+
+  /* 입력한 특기가 표에 있는지 즉시 알려줍니다 */
+  function specKeys(){
+    var f = $("milForce").value;
+    if(!f) return null;
+    var v = ($("milSpec").value || "").replace(/\s/g,"");
+    if(!v) return null;
+    var tbl = MIL_SPEC[f], hit = null;
+    for(var k in tbl){ if(k.replace(/\s/g,"") === v){ hit = k; break; } }
+    if(!hit){ for(var k2 in tbl){ if(k2.replace(/\s/g,"").indexOf(v) === 0){ hit = k2; break; } } }
+    if(!hit) return null;
+    return { name:hit, keys:tbl[hit].split(",") };
+  }
+  $("milSpec").addEventListener("input", function(){
+    var r = specKeys(), el = $("milHit");
+    if(!r){ el.innerHTML = $("milSpec").value ? '<span style="color:#C0392B">표에서 찾지 못한 특기입니다. 목록에서 골라 주세요.</span>' : ""; return; }
+    var names = r.keys.map(function(k){ return FIELD[k] ? FIELD[k].t : k; }).join(" · ");
+    el.innerHTML = '<b>'+r.name+'</b> → 직무분야 <b>'+names+'</b>';
+  });
+
+  /* ── 종목 정의 ── fam: s(안전관리군) / h(화학군) */
+  var ITEMS = [
+    { name:"위험물기능사",     fam:"h", grade:"craft", col:"danger", label:"위험물" },
+    { name:"산업안전산업기사", fam:"s", grade:"ind",   col:"safe",   label:"산업안전" },
+    { name:"소방설비산업기사", fam:"s", grade:"ind",   col:"fire",   label:"소방설비" },
+    { name:"위험물산업기사",   fam:"h", grade:"ind",   col:"danger", label:"위험물" },
+    { name:"산업안전기사",     fam:"s", grade:"eng",   col:"safe",   label:"산업안전" },
+    { name:"소방설비기사",     fam:"s", grade:"eng",   col:"fire",   label:"소방설비" }
+  ];
+
+  var okList = [], noList = [];
 
   function courseBox(name){
     var c = COURSES[name];
@@ -260,141 +474,277 @@
            '<b>' + name + ' 과정</b><br>' + detail + '</div>';
   }
 
-  $("go").addEventListener("click", function(){
-    var edu = $("edu").value, major = $("major").value, cert = $("cert").value;
-    var exp = parseInt($("exp").value,10), credit = parseInt($("credit").value,10);
+  /* ── 등급 판정 ── */
+  function judgeInd(rel, edu, cert, exp, credit){
+    var ok = [];
+    if(rel && (edu==="col2"||edu==="col3"||edu==="uni")) ok.push("관련학과 전문대 졸업(예정) 이상");
+    if(cert==="craft" && exp>=1) ok.push("기능사 취득 + 인정경력 1년 이상");
+    if(cert==="ind"||cert==="eng") ok.push("동일·유사 분야 산업기사 이상 취득");
+    if(exp>=2) ok.push("인정 직무분야 실무경력 2년 이상");
+    if(credit>=41) ok.push("학점은행 41학점 이상");
+    return ok;
+  }
+  function judgeEng(rel, edu, cert, exp, credit){
+    var ok = [];
+    if(rel && edu==="uni") ok.push("관련학과 4년제 졸업(예정)");
+    if(rel && edu==="col3" && exp>=1) ok.push("3년제 전문대 졸업 + 인정경력 1년 이상");
+    if(rel && edu==="col2" && exp>=2) ok.push("2년제 전문대 졸업 + 인정경력 2년 이상");
+    if(cert==="ind" && exp>=1) ok.push("산업기사 취득 + 인정경력 1년 이상");
+    if(cert==="craft" && exp>=3) ok.push("기능사 취득 + 인정경력 3년 이상");
+    if(cert==="eng") ok.push("동일·유사 분야 기사 취득");
+    if(exp>=4) ok.push("인정 직무분야 실무경력 4년 이상");
+    if(credit>=106) ok.push("학점은행 106학점 이상");
+    return ok;
+  }
 
-    if(!edu || !major || !cert || isNaN(exp) || isNaN(credit)){
+  /* 남은 기간을 년·개월로 씁니다 (군 경력이 붙으면 소수가 나오기 때문) */
+  function gapTxt(y){
+    var m = Math.max(Math.ceil(y*12), 0);
+    if(m === 0) return "0개월";
+    var yy = Math.floor(m/12), mm = m % 12;
+    return (yy ? yy+"년" : "") + (yy && mm ? " " : "") + (mm ? mm+"개월" : "");
+  }
+
+  /* ── 미달 시 최단 경로 ── */
+  function gapsInd(exp, credit, fieldOk){
+    var g = [];
+    if(credit<41) g.push({t:"학점은행 <b>"+(41-credit)+"학점</b> 추가 이수", w:(41-credit)});
+    if(fieldOk) g.push({t:"인정 직무분야 경력 <b>"+gapTxt(2-exp)+"</b> 추가", w:(2-exp)*40});
+    g.push({t:"<b>위험물기능사</b> 먼저 취득(응시 제한 없음) 후 경력 1년", w:60});
+    g.sort(function(a,b){return a.w-b.w;});
+    return g;
+  }
+  function gapsEng(exp, credit, fieldOk, indPass){
+    var g = [];
+    if(credit<106) g.push({t:"학점은행 <b>"+(106-credit)+"학점</b> 추가 이수", w:(106-credit)});
+    if(fieldOk) g.push({t:"인정 직무분야 경력 <b>"+gapTxt(4-exp)+"</b> 추가", w:(4-exp)*40});
+    if(indPass) g.push({t:"<b>산업기사를 먼저 취득</b>하고 경력 1년", w:50});
+    else g.push({t:"<b>위험물기능사 → 산업기사</b> 순으로 단계 취득", w:150});
+    g.sort(function(a,b){return a.w-b.w;});
+    return g;
+  }
+
+  $("go").addEventListener("click", function(){
+    var edu    = $("edu").value,
+        major  = $("major").value,
+        cert   = $("cert").value,
+        field  = $("field").value,
+        exp    = parseInt($("exp").value,10),
+        credit = parseInt($("credit").value,10);
+
+    if(!edu || !major || !cert || !field || isNaN(exp) || isNaN(credit)){
       $("err").hidden = false; $("res").hidden = true; return;
     }
     $("err").hidden = true;
-    okList = [];
+    okList = []; noList = [];
 
-    var rel = (major !== "none");
+    var F = FIELD[field], M = MAJOR[major];
+    if(field === "noexp") exp = 0;
 
-    var indOk = [], indGap = [];
-    if(rel && (edu==="col2"||edu==="col3"||edu==="uni")) indOk.push("관련학과 전문대 졸업(예정) 이상");
-    if(cert==="craft" && exp>=1) indOk.push("기능사 취득 + 경력 1년 이상");
-    if(cert==="ind"||cert==="eng") indOk.push("동일·유사 분야 산업기사 이상 취득");
-    if(exp>=2) indOk.push("실무경력 2년 이상");
-    if(credit>=41) indOk.push("학점은행 41학점 이상");
-    if(indOk.length===0){
-      var g1 = [];
-      if(credit<41) g1.push({t:"학점은행 <b>"+(41-credit)+"학점</b> 추가 이수", w:(41-credit)});
-      if(exp<2) g1.push({t:"실무경력 <b>"+(2-exp)+"년</b> 추가", w:(2-exp)*40});
-      g1.push({t:"<b>위험물기능사</b> 먼저 취득 후 경력 1년", w:60});
-      g1.sort(function(a,b){return a.w-b.w;});
-      indGap = g1;
-    }
-
-    var engOk = [], engGap = [];
-    if(rel && edu==="uni") engOk.push("관련학과 4년제 졸업(예정)");
-    if(rel && edu==="col3" && exp>=1) engOk.push("3년제 전문대 졸업 + 경력 1년 이상");
-    if(rel && edu==="col2" && exp>=2) engOk.push("2년제 전문대 졸업 + 경력 2년 이상");
-    if(cert==="ind" && exp>=1) engOk.push("산업기사 취득 + 경력 1년 이상");
-    if(cert==="craft" && exp>=3) engOk.push("기능사 취득 + 경력 3년 이상");
-    if(cert==="eng") engOk.push("동일·유사 분야 기사 취득");
-    if(exp>=4) engOk.push("실무경력 4년 이상");
-    if(credit>=106) engOk.push("학점은행 106학점 이상");
-    if(engOk.length===0){
-      var g2 = [];
-      if(credit<106) g2.push({t:"학점은행 <b>"+(106-credit)+"학점</b> 추가 이수", w:(106-credit)});
-      if(exp<4) g2.push({t:"실무경력 <b>"+(4-exp)+"년</b> 추가", w:(4-exp)*40});
-      if(indOk.length>0) g2.push({t:"<b>산업기사를 먼저 취득</b>하고 경력 1년", w:50});
-      else g2.push({t:"<b>위험물기능사 → 산업기사</b> 순으로 단계 취득", w:150});
-      g2.sort(function(a,b){return a.w-b.w;});
-      engGap = g2;
-    }
-
-    function card(name, pass, reasons, gaps){
-      var s = SUBJ[name];
-      var html = '<div class="row '+(pass?"ok":"no")+'">'+
-        '<div class="nm">'+name+'<em class="e-'+(s==="safe"?"safe":s==="danger"?"danger":"fire")+'">'+LABEL[s]+'</em></div>';
-      if(pass){
-        html += '<p class="rs">✅ <b>응시 가능</b> — '+reasons[0]+'</p>';
-        html += courseBox(name);
-        okList.push(name);
-      } else {
-        html += '<p class="rs">아래 중 하나를 채우면 응시할 수 있습니다.</p><ul class="strat">';
-        for(var i=0;i<gaps.length;i++){
-          html += '<li'+(i===0?' class="best"':'')+'>'+gaps[i].t+(i===0?' &nbsp;← 가장 빠른 길':'')+'</li>';
-        }
-        html += '</ul>';
+    /* ── 군 복무 경력 ──
+       특기가 속한 직무분야를 찾아 종목군별로 따로 더합니다.
+       민간 경력과 군 경력의 직무분야가 달라도 각각 인정되는 쪽에만 붙습니다. */
+    var milR = specKeys();
+    var milMon = parseInt($("milMon").value, 10);
+    if(isNaN(milMon) || milMon < 0) milMon = 0;
+    var milYr = milMon / 12;
+    var milS = 0, milH = 0, milLabel = "";
+    if(milR && milYr > 0){
+      var mS = 0, mH = 0;
+      for(var mi = 0; mi < milR.keys.length; mi++){
+        var FK = FIELD[milR.keys[mi]];
+        if(!FK) continue;
+        if(FK.s > mS) mS = FK.s;
+        if(FK.h > mH) mH = FK.h;
       }
-      return html + '</div>';
+      if(mS >= 1) milS = milYr;
+      if(mH >= 1) milH = milYr;
+      milLabel = FORCE_NM[$("milForce").value] + " " + milR.name;
+      var milFldNm = milR.keys.map(function(k){ return FIELD[k] ? FIELD[k].t : k; }).join(" · ");
     }
+
+    /* 종목군별 인정 경력 — 미인정 분야면 0년으로 계산 */
+    var expS = ((F.s >= 1) ? exp : 0) + milS;
+    var expH = ((F.h >= 1) ? exp : 0) + milH;
+    var relS = (M.s >= 1), relH = (M.h >= 1);
+
+    /* 종목군별 판정 결과 캐시 */
+    var indS = judgeInd(relS, edu, cert, expS, credit);
+    var indH = judgeInd(relH, edu, cert, expH, credit);
+    var engS = judgeEng(relS, edu, cert, expS, credit);
 
     var html = "";
+
+    /* ── 군 경력 반영 결과 ── */
+    if(milR && milYr > 0){
+      var okTxt = [];
+      if(milS > 0) okTxt.push("산업안전 · 소방설비");
+      if(milH > 0) okTxt.push("위험물");
+      html += '<div class="el-warn" style="background:#F4F9FF;border-color:#C6DCF2">'+
+        '<h4 style="color:#17457F">🎖 군 복무 경력을 반영했습니다</h4>'+
+        '<b>'+milLabel+'</b> · 직무분야 <b>'+milFldNm+'</b> · '+milMon+'개월'+
+        (okTxt.length
+          ? ' → <b>'+okTxt.join(", ")+'</b> 응시자격 경력으로 <b>'+gapTxt(milYr)+'</b> 인정했습니다.'
+          : ' → 이 특기의 직무분야는 세 종목 어느 쪽에도 인정되지 않아 <b>0년</b>으로 계산했습니다.')+
+        '<br>기초군사훈련 기간은 산정에서 제외됩니다. 증빙은 <b>병적증명서</b> 또는 소속 부대 발급 <b>경력증명서</b>로 하며, '+
+        '최종 인정 여부는 한국산업인력공단이 개별 심사합니다.</div>';
+    }
+    else if($("milForce").value && !milR){
+      html += '<div class="el-warn"><h4>⚠️ 군 특기를 확인하지 못했습니다</h4>'+
+        '입력하신 특기명이 인정 범위표에 없어 <b>군 경력을 0년으로</b> 계산했습니다. '+
+        '특기명이 바뀌었을 수도 있고, <b>인정 범위표 자체에 없는 특기</b>(행정·재정·군종 등)일 수도 있습니다. '+ '아래 목록에서 다시 찾아보시고, '+
+        '없으면 <b>1644-8000</b>으로 확인하세요.</div>';
+    }
+
+    /* ── 경고 1 : 경력이 아예 인정 안 되는 분야 ── */
+    if(exp > 0 && F.s === 0 && F.h === 0){
+      html += '<div class="el-warn"><h4>⚠️ 선택하신 분야의 경력은 응시자격 경력으로 계산되지 않습니다</h4>'+
+        '<b>'+F.t+'</b> 분야는 국가기술자격법 시행규칙 별표 11의2의 인정 범위에 포함되지 않습니다. '+
+        '경력 연수와 관계없이 <b>0년</b>으로 계산했습니다.<br>'+
+        '다만 같은 회사 안에서도 <b>생산관리·설비·품질관리 업무를 실제로 수행</b>했다면 인정될 수 있습니다. '+
+        '판정 주체는 한국산업인력공단이므로, 애매하면 원서 접수 전에 큐넷 응시자격 자가진단 또는 1644-8000으로 확인하세요.</div>';
+    }
+    /* ── 경고 2 : 안전관리군은 되는데 위험물은 안 되는 분야 ── */
+    else if(exp > 0 && F.s >= 1 && F.h === 0){
+      html += '<div class="el-warn"><h4>⚠️ 이 경력은 산업안전·소방설비에는 인정되지만 위험물에는 인정되지 않습니다</h4>'+
+        '<b>'+F.t+'</b> 분야는 안전관리(25) 종목의 유사 직무분야에는 포함되지만, '+
+        '위험물이 속한 화학(18) 분야의 유사 직무분야에는 <b>포함되지 않습니다</b>. '+
+        '그래서 위험물산업기사는 경력 경로가 아닌 <b>학점은행 41학점</b> 또는 <b>위험물기능사 선취득</b> 경로로 가야 합니다.</div>';
+    }
+    /* ── 경고 3 : 전공 인정 확인 필요 ── */
+    if(M.s === 1 || M.h === 1){
+      html += '<div class="el-warn"><h4>⚠️ 전공의 관련학과 인정 여부는 큐넷에서 확인하세요</h4>'+
+        '관련학과 판단은 <b>학과 명칭이 아니라 이수한 교육과정</b> 기준이고, 종목마다 지정 학과 목록이 다릅니다. '+
+        '아래 결과는 관련학과로 인정된다는 가정으로 계산했습니다. '+
+        '큐넷 <b>응시자격 자가진단</b> 또는 <b>1644-8000</b>으로 확인해 두시면 안전합니다.</div>';
+    }
+
+    /* ── 종목 카드 ── */
+    var okHtml = "", noHtml = "";
+    for(var i=0;i<ITEMS.length;i++){
+      var it = ITEMS[i], pass = false, reasons = [], gaps = [];
+      var rel = (it.fam==="s") ? relS : relH;
+      var e   = (it.fam==="s") ? expS : expH;
+      var fieldOk = (it.fam==="s") ? (F.s>=1) : (F.h>=1);
+
+      if(it.grade === "craft"){
+        pass = true; reasons = ["기능사는 학력·경력 제한이 없습니다"];
+      } else if(it.grade === "ind"){
+        reasons = (it.fam==="s") ? indS : indH;
+        pass = reasons.length > 0;
+        if(!pass) gaps = gapsInd(e, credit, fieldOk);
+      } else {
+        reasons = engS;
+        pass = reasons.length > 0;
+        if(!pass) gaps = gapsEng(e, credit, fieldOk, ((it.fam==="s") ? indS : indH).length > 0);
+      }
+
+      var card = '<div class="el-row '+(pass?"ok":"no")+'">'+
+        '<div class="nm">'+it.name+'<em class="e-'+it.col+'">'+it.label+'</em></div>';
+      if(pass){
+        card += '<p class="rs">✅ <b>응시 가능</b> — '+reasons[0]+'</p>' + courseBox(it.name);
+        okList.push(it.name);
+        okHtml += card + '</div>';
+      } else {
+        card += '<p class="rs">아래 중 하나를 채우면 응시할 수 있습니다.</p><ul class="strat">';
+        for(var j=0;j<gaps.length;j++){
+          card += '<li'+(j===0?' class="best"':'')+'>'+gaps[j].t+(j===0?' &nbsp;← 가장 빠른 길':'')+'</li>';
+        }
+        noList.push(it.name);
+        noHtml += card + '</ul></div>';
+      }
+    }
+
     html += '<div class="band"><h2>지금 응시할 수 있는 자격</h2>'+
-            '<p class="s">아래는 현재 조건으로 바로 원서 접수가 가능합니다.</p>';
-    html += card("위험물기능사", true, ["기능사는 학력·경력 제한이 없습니다"], []);
-    if(indOk.length){
-      html += card("산업안전산업기사", true, indOk, []);
-      html += card("위험물산업기사", true, indOk, []);
-      html += card("소방설비산업기사", true, indOk, []);
-    }
-    if(engOk.length){
-      html += card("산업안전기사", true, engOk, []);
-      html += card("소방설비기사", true, engOk, []);
-    }
-    html += '</div>';
-
-    if(!indOk.length || !engOk.length){
+            '<p class="s">현재 조건으로 바로 원서 접수가 가능합니다.</p>'+ okHtml +'</div>';
+    if(noHtml){
       html += '<div class="band no"><h2>아직 자격이 안 되는 것 — 확보 전략</h2>'+
-              '<p class="s">가장 빠른 길에 표시해 두었습니다.</p>';
-      if(!indOk.length){
-        html += card("산업안전산업기사", false, [], indGap);
-        html += card("위험물산업기사", false, [], indGap);
-        html += card("소방설비산업기사", false, [], indGap);
-      }
-      if(!engOk.length){
-        html += card("산업안전기사", false, [], engGap);
-        html += card("소방설비기사", false, [], engGap);
-      }
-      html += '</div>';
+              '<p class="s">가장 빠른 길에 표시해 두었습니다.</p>'+ noHtml +'</div>';
     }
 
-    if(major==="etc_eng" || major==="chem" || major==="fire"){
-      html += '<div class="row no" style="border-left-color:#B58A00">'+
-        '<div class="nm">⚠️ 전공 인정 여부는 큐넷에서 확인하세요</div>'+
-        '<p class="rs">관련학과 판단은 <b>학과 명칭이 아니라 이수한 교육과정</b> 기준입니다. '+
-        '위 결과는 관련학과로 인정된다는 가정으로 계산했습니다. '+
-        '큐넷 <b>응시자격 자가진단</b> 또는 <b>1644-8000</b>으로 확인해 두시면 안전합니다.</p></div>';
+    /* ── 경력증명서 기재 가이드 ── */
+    if(exp > 0){
+      html += '<div class="guide"><h3>경력증명서, 이렇게 쓰면 인정받지 못합니다</h3>'+
+        '<p class="s">공단은 회사 업종이나 부서명이 아니라 <strong>담당업무 칸에 적힌 실제 업무</strong>로 분야를 판정합니다.</p>'+
+        '<table><thead><tr><th>담당업무 기재</th><th>판정</th></tr></thead><tbody>'+
+        '<tr><td class="bad" style="background:#fff;text-align:left;white-space:normal">생산직</td><td style="text-align:left">직무 확인 불가 — 보완 요구 또는 불인정</td></tr>'+
+        '<tr><td class="bad" style="background:#fff;text-align:left;white-space:normal">사원 / 대리 / 반장</td><td style="text-align:left">직위일 뿐 업무가 아님 — 판정 불가</td></tr>'+
+        '<tr><td class="bad" style="background:#fff;text-align:left;white-space:normal">관리부 근무</td><td style="text-align:left">부서명만으로는 분야 특정 불가</td></tr>'+
+        '<tr><td class="good" style="background:#fff;text-align:left;white-space:normal">자동차 부품 생산 업무</td><td style="text-align:left">생산관리 분야로 판정 가능</td></tr>'+
+        '<tr><td class="good" style="background:#fff;text-align:left;white-space:normal">화학제품 제조설비 운전</td><td style="text-align:left">화학 분야로 판정 가능</td></tr>'+
+        '<tr><td class="good" style="background:#fff;text-align:left;white-space:normal">건설현장 안전점검 및 안전교육</td><td style="text-align:left">안전관리 분야로 판정 가능</td></tr>'+
+        '</tbody></table>'+
+        '<p class="el-src">회사에 경력증명서를 요청할 때 <strong>담당업무를 구체적으로 기재해 달라고 미리 요청</strong>하세요. '+
+        '단, 실제로 수행하지 않은 업무를 기재하면 자격이 취소될 수 있습니다. '+
+        '사실대로 쓰되 <strong>구체적으로</strong> 쓰는 것이 핵심입니다.</p></div>';
     }
 
+    /* ── 탈락고객 확보 블록 ──
+       "지금은 안 됩니다"로 끝내면 그 사람은 창을 닫고 끝입니다.
+       그런데 '2년 뒤 가능'으로 나온 사람은 2년 뒤 확실한 고객입니다.
+       그 시점을 알려드리겠다고 제안해 명단에 남기는 것이 이 블록의 목적입니다. ── */
+    if(noList.length > 0){
+      var nearest = noList[0];
+      html += '<div class="nurture" id="nurture">'+
+        '<h3>지금 안 되는 자격, 언제 가능해지는지 알려드릴까요</h3>'+
+        '<p class="s">위에 표시된 <strong>'+ noList.length +'개</strong> 자격은 조건이 채워지면 바로 응시할 수 있습니다. '+
+        '조건을 채우는 시점이 되면 그때 먼저 알려드립니다. 광고는 보내지 않습니다.</p>'+
+        '<ul class="nurture-list">'+
+          '<li>응시자격이 생기는 시점에 <strong>알림</strong></li>'+
+          '<li>해당 자격 <strong>기출문제·개강 일정</strong>을 그때 함께</li>'+
+          '<li>지금 바로 가능한 자격이 있으면 <strong>그쪽 안내</strong></li>'+
+        '</ul>'+
+        '<div class="nurture-cta">'+
+          '<button type="button" class="b1" id="notifyGo">알림 신청하기</button>'+
+          '<a class="ghost" href="'+ KAKAO +'" target="_blank" rel="noopener">네이버 톡톡으로 알림받기</a>'+
+        '</div>'+
+        '<p class="el-src">신청하시면 이름과 연락처만 받습니다. 언제든 그만 받으실 수 있습니다.</p>'+
+      '</div>';
+    }
+
+    /* ── 2단계 : 내일배움카드 ── */
     html += '<div class="step2" id="step2"><h3>다음 단계 — 국비 지원 확인</h3>'+
       '<p>응시 가능한 자격이 <strong>'+okList.length+'개</strong> 있습니다. '+
       '국비 과정으로 준비하시려면 <strong>내일배움카드</strong>가 필요합니다.</p>'+
       '<button type="button" class="b1" id="cardY">카드가 있습니다 → 수강신청 안내</button>'+
       '<button type="button" class="b2" id="cardN">카드가 없습니다 → 발급 안내</button>'+
       '<button type="button" class="b2" id="cardU">잘 모르겠습니다 → 상담</button></div>';
+
     html += '<div id="final"></div>';
 
     $("res").innerHTML = html;
+
+    /* 알림 신청 → 상담 신청 팝업을 '알림 신청' 모드로 엽니다 */
+    var nb = $("notifyGo");
+    if(nb) nb.addEventListener("click", function(){
+      if(typeof track === "function") track("notify_open", noList.join("/"));
+      var msg = document.getElementById("cf-msg");
+      if(msg && !msg.value){
+        msg.value = "[알림 신청] 아직 자격이 안 되는 자격: " + noList.join(", ")
+                  + " / 조건이 채워지는 시점에 알려주세요.";
+      }
+      var opener = document.querySelector("[data-open-form]");
+      if(opener) opener.click();
+      else window.open(KAKAO, "_blank");
+    });
     $("res").hidden = false;
     $("res").scrollIntoView({behavior:"smooth", block:"start"});
 
     function finalBlock(kind){
-      var h = "", p = "", steps = "", a1 = "";
+      var h="", p="", steps="", a1="";
       if(kind==="Y"){
         h = "바로 수강신청하실 수 있습니다";
-        p = "카드가 있으시면 고용24에서 과정을 검색해 신청하면 됩니다.";
-        steps = '<ol><li>고용24 로그인 → 훈련과정 검색</li>'+
-                '<li>\'지행재직업전문학교\'로 검색</li>'+
-                '<li>해당 과정 수강신청</li></ol>';
+        p = "카드가 있으시면 고용24에서 과정을 검색해 신청하면 됩니다. 어느 과정이 맞는지 헷갈리시면 상담에서 정해 드립니다.";
+        steps = '<ol><li>고용24 로그인 → 훈련과정 검색</li><li>\u2018지행재직업전문학교\u2019로 검색</li><li>해당 과정 수강신청</li></ol>';
         a1 = "과정 선택 상담 신청하기";
       } else if(kind==="N"){
         h = "먼저 내일배움카드부터 발급받으세요";
         p = "카드 발급에 <strong>1~2주</strong>가 걸리므로, 개강일을 놓치지 않으려면 지금 신청하시는 것이 좋습니다.";
-        steps = '<ol><li>고용24 회원가입</li>'+
-                '<li>내일배움카드 신청 (온라인 약 15분)</li>'+
-                '<li>승인까지 1~2주 대기</li>'+
-                '<li>카드 발급 후 수강신청</li></ol>';
+        steps = '<ol><li>고용24 회원가입</li><li>내일배움카드 신청 (온라인 약 15분)</li><li>승인까지 1~2주 대기</li><li>카드 발급 후 수강신청</li></ol>';
         a1 = "발급이 어렵다면 상담 신청하기";
       } else {
         h = "상담에서 한 번에 확인해 드립니다";
         p = "카드 보유 여부, 자부담 금액, 개강 일정까지 함께 짚어 드립니다.";
-        steps = "";
         a1 = "상담 신청하기";
       }
       var out = '<div class="cta"><h3>'+h+'</h3><p>'+p+'</p>'+steps+
@@ -411,12 +761,77 @@
     $("cardU").addEventListener("click", function(){ finalBlock("U"); });
   });
 })();
+
+})();
+
+/* =========================================================
+   ★ 국가기술자격 응시일정 — 상단 띠에 표시
+   ※ 아래 값은 자리를 잡기 위한 임시 데이터입니다.
+     실제 운영에서는 공공데이터 API(한국산업인력공단 국가자격 시험일정)가
+     구글시트 [시험일정] 탭에 넣어준 값을 읽어옵니다.
+     ▶ 반드시 실제 회차표로 교체한 뒤 공개하세요.
+   ========================================================= */
+const EXAMS = [
+  { name:"산업안전기사 필기", round:"2026년 3회", apply:"2026-08-17", exam:"2026-09-12" },
+  { name:"위험물기능사 실기", round:"2026년 4회", apply:"2026-09-01", exam:"2026-10-10" },
+  { name:"소방설비산업기사 실기", round:"2026년 3회", apply:"2026-09-21", exam:"2026-11-07" }
+];
+
+(function(){
+  const box=document.getElementById('barExam'); if(!box) return;
+  const today=new Date(); today.setHours(0,0,0,0);
+
+  // 원서접수가 아직 남은 회차만, 접수일이 가까운 순서로
+  const list = EXAMS
+    .map(e => ({...e, d: Math.ceil((new Date(e.apply)-today)/86400000)}))
+    .filter(e => e.d >= 0)
+    .sort((a,b) => a.d - b.d);
+
+  if(!list.length){ box.innerHTML = '<span class="exam-label">시험일정 준비 중</span>'; return; }
+
+  const html = e =>
+    `<span class="dday-x num">원서접수 D-${e.d}</span>` +
+    `<span class="exam-label"><b>${e.name}</b> ${e.round} · 시험 ${fmt(e.exam)}</span>`;
+
+  box.innerHTML = html(list[0]);
+
+  // 1건이거나 애니메이션을 줄이는 설정이면 회전하지 않습니다
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(list.length < 2 || reduce) return;
+
+  let i = 0, timer = null;
+  const ROTATE_MS = 4000;
+
+  function step(){
+    i = (i + 1) % list.length;
+    box.classList.add('is-out');
+    setTimeout(() => {
+      box.innerHTML = html(list[i]);
+      box.classList.remove('is-out');
+    }, 260);
+  }
+  function play(){ timer = setInterval(step, ROTATE_MS); }
+  function stop(){ clearInterval(timer); timer = null; }
+
+  play();
+  // 읽는 중에는 멈춥니다
+  box.addEventListener('mouseenter', stop);
+  box.addEventListener('mouseleave', play);
+  document.addEventListener('visibilitychange', () => document.hidden ? stop() : play());
+})();
+
 </script>
 
 <!-- 도메인 잠금 -->
 <script>
 (function(){
+  /* ★ PREVIEW_MODE : 시안을 검토하는 동안만 true.
+     실제 도메인에 올리기 전에 반드시 false 로 바꾸십시오. */
+  var PREVIEW_MODE = true;
+  if(PREVIEW_MODE) return;
+
   var ALLOW_HOSTS = [
+    /* ★② 실제 운영 도메인을 넣으세요 */
     "jihaengjae.github.io",
     "jhj.education",
     "www.jhj.education",
